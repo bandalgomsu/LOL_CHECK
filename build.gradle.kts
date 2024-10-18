@@ -45,8 +45,8 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testRuntimeOnly ("com.h2database:h2")
     testImplementation ("io.r2dbc:r2dbc-h2")
+    testRuntimeOnly ("com.h2database:h2")
 }
 
 dependencyManagement {
