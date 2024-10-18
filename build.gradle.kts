@@ -35,9 +35,20 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-    implementation ("io.asyncer:r2dbc-mysql:1.0.4")
-    implementation("me.paulschwarz:spring-dotenv:4.0.0")
     implementation("io.netty:netty-resolver-dns-native-macos")
+
+    //MySql
+    implementation ("io.asyncer:r2dbc-mysql:1.0.4")
+    runtimeOnly("com.mysql:mysql-connector-j")
+
+    //Dotnet
+    implementation("me.paulschwarz:spring-dotenv:4.0.0")
+
+
+    // Flyway
+    implementation("org.flywaydb:flyway-core")
+    compileOnly("org.flywaydb:flyway-mysql")
+
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
