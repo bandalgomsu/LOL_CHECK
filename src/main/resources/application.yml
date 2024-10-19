@@ -12,3 +12,8 @@ spring:
 logging:
   level:
     org.springframework.r2dbc.core: debug
+
+riot:
+  api:
+    url : ${RIOT_API_URL}
+    key : ${RIOT_API_KEY}
