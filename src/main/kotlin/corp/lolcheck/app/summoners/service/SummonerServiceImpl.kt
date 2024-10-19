@@ -34,4 +34,18 @@ class SummonerServiceImpl(
         )
     }
 
+    override suspend fun getSummonerInfoByGameNameAndTagLine(
+        gameName: String,
+        tagLine: String
+    ): SummonerResponse.SummonerInfo {
+        val summoner: Summoner = summonerRepository.findByGameNameAndTagLine(gameName, tagLine)
+            .awaitSingle()
+
+        return SummonerResponse.SummonerInfo(
+            summonerId = summoner.id,
+            puuid = summoner.puuid,
+            gameName = summoner.gameName,
+            tagLine = summoner.tagLine
+        )
+    }
 }
