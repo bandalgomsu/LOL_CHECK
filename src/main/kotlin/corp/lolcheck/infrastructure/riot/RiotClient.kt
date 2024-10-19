@@ -1,6 +1,5 @@
 package corp.lolcheck.infrastructure.riot
 
-import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -12,12 +11,12 @@ import reactor.core.publisher.Mono
 @Component
 
 class RiotClient(
-    @Value("\${riot.api.key}") private var apiKey: String,
+    @Value("\${riot.api.key}") private val apiKey: String,
 ) {
-    private var logger: Logger? = LoggerFactory.getLogger(RiotClient::class.java)
+    private val logger: Logger? = LoggerFactory.getLogger(RiotClient::class.java)
 
-    suspend fun getPuuid(gameName: String, tagLine: String): RiotClientData.GetPuuidResponse {
-        var uri: String = String.format(
+    fun getPuuid(gameName: String, tagLine: String): Mono<RiotClientData.GetPuuidResponse> {
+        val uri: String = String.format(
             "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/%s/%s?api_key=%s",
             gameName, tagLine, this.apiKey
         )
@@ -27,11 +26,11 @@ class RiotClient(
             .uri(uri)
             .retrieve()
             .bodyToMono<RiotClientData.GetPuuidResponse>()
-            .awaitSingle()
+
     }
 
-    suspend fun getCurrentGameInfo(puuid: String): Boolean {
-        var uri: String = String.format(
+    fun checkCurrentGameInfo(puuid: String): Mono<Boolean> {
+        val uri: String = String.format(
             "https://kr.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/%s?api_key=%s", puuid, this.apiKey
         )
 
@@ -42,6 +41,7 @@ class RiotClient(
             .bodyToMono<Any>()
             .flatMap {
                 Mono.just(true)
-            }.awaitSingle()
+            }
+
     }
 }

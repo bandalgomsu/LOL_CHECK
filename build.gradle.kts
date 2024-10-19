@@ -61,6 +61,8 @@ dependencies {
     testImplementation("io.asyncer:r2dbc-mysql:1.0.4")
     testRuntimeOnly("com.mysql:mysql-connector-j")
     testCompileOnly("org.flywaydb:flyway-mysql")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+    testImplementation("io.mockk:mockk:1.13.5")
 }
 
 dependencyManagement {

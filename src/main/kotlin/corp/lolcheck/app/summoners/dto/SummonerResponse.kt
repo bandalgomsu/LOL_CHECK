@@ -4,10 +4,10 @@ import java.time.LocalDateTime
 
 class SummonerResponse {
     data class SummonerInfo(
-        var summonerId: Long? = null,
-        var puuid: String,
-        var gameName: String,
-        var tagLine: String,
-        var recentGame: LocalDateTime? = null
+        val summonerId: Long? = null,
+        val puuid: String,
+        val gameName: String,
+        val tagLine: String,
+        val recentGame: LocalDateTime? = null
     )
 }

@@ -12,17 +12,16 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class SummonerServiceImpl(
-    private var summonerRepository: SummonerRepository,
-    private var riotClient: RiotClient,
+    private val summonerRepository: SummonerRepository,
+    private val riotClient: RiotClient,
 ) : SummonerService {
-    
     override suspend fun registrySummoner(gameName: String, tagLine: String): SummonerResponse.SummonerInfo {
-        var puuid: String = this.getSummonerPuuid(gameName, tagLine)
+        val puuid: String = riotClient.getPuuid(gameName, tagLine).awaitSingle().puuid
 
-        val summoner = Summoner(
+        val summoner: Summoner = Summoner(
             puuid = puuid,
             gameName = gameName,
-            tagLine = tagLine,
+            tagLine = tagLine
         )
 
         val save: Summoner = summonerRepository.save(summoner).awaitSingle()
@@ -31,16 +30,8 @@ class SummonerServiceImpl(
             summonerId = save.id,
             puuid = save.puuid,
             gameName = save.gameName,
-            tagLine = save.tagLine,
-            recentGame = save.recentGame
+            tagLine = save.tagLine
         )
     }
 
-    override suspend fun getSummonerPuuid(gameName: String, tagLine: String): String {
-        return riotClient.getPuuid(gameName, tagLine).puuid
-    }
-
-    override suspend fun checkPlayingGame(puuid: String): Boolean {
-        return riotClient.getCurrentGameInfo(puuid)
-    }
 }
