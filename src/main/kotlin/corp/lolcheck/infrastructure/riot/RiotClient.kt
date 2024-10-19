@@ -11,16 +11,28 @@ class RiotClient(
     @Value("\${riot.api.key}") private var apiKey: String,
     @Value("\${riot.api.url}") private var baseUrl: String,
 ) {
-    fun getPuuid(gameName: String, tagLine: String): Mono<GetPuuidResponse> {
+    fun getPuuid(gameName: String, tagLine: String): Mono<RiotClientData.GetPuuidResponse> {
         var uri: String = String().format(
-            "/riot/account/v1/accounts/by-riot-id/%s/%s?api_key=%s",
+            "https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/%s/%s?api_key=%s",
             gameName, tagLine, this.apiKey
         )
 
-        return WebClient.builder().baseUrl(this.baseUrl).build()
+        return WebClient.builder().build()
             .get()
             .uri(uri)
             .retrieve()
-            .bodyToMono<GetPuuidResponse>()
+            .bodyToMono<RiotClientData.GetPuuidResponse>()
+    }
+
+    fun getCurrentGameInfo(puuid: String): Mono<Any> {
+        var uri: String = String().format(
+            "https://kr.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/%s?api_key=%s", puuid, this.apiKey
+        )
+
+        return WebClient.builder().build()
+            .get()
+            .uri(uri)
+            .retrieve()
+            .bodyToMono<Any>()
     }
 }
