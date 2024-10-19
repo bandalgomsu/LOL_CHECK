@@ -27,5 +27,4 @@ CREATE TABLE IF NOT EXISTS summoner_subscriber(
     primary key (id)
 );
 
-
-
+ALTER TABLE summoner_subscriber ADD UNIQUE (summoner_id, subscriber_id);

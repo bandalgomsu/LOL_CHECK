@@ -16,6 +16,8 @@ class SummonerServiceImpl(
     private val summonerRepository: SummonerRepository,
     private val riotClient: RiotClient,
 ) : SummonerService {
+
+    @Transactional
     override suspend fun registrySummoner(gameName: String, tagLine: String): SummonerResponse.SummonerInfo =
         coroutineScope {
             val puuid: String = riotClient.getPuuid(gameName, tagLine).awaitSingle().puuid
@@ -36,6 +38,7 @@ class SummonerServiceImpl(
             )
         }
 
+    @Transactional
     override suspend fun getSummonerInfoByGameNameAndTagLine(
         gameName: String,
         tagLine: String

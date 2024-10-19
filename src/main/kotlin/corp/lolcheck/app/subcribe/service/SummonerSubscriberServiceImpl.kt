@@ -10,6 +10,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SummonerSubscriberServiceImpl(
@@ -17,10 +18,14 @@ class SummonerSubscriberServiceImpl(
     private val riotClient: RiotClient,
     private val summonerService: SummonerService
 ) : SummonerSubscriberService {
+
+    @Transactional
     override suspend fun subscribeSummoner(
         userId: Long,
         summonerId: Long
     ): SummonerSubscriberResponse.SummonerSubscriberInfo = coroutineScope {
+        duplicateSummonerSubscriber(userId, summonerId)
+
         val subscriber: SummonerSubscriber = SummonerSubscriber(
             subscriberId = userId,
             summonerId = summonerId,
@@ -35,6 +40,16 @@ class SummonerSubscriberServiceImpl(
         )
     }
 
+    private suspend fun duplicateSummonerSubscriber(
+        userId: Long,
+        summonerId: Long
+    ) = coroutineScope {
+        if (summonerSubscriberRepository.findBySubscriberIdAndSummonerId(userId, summonerId) != null) {
+            throw Exception()
+        }
+    }
+
+    @Transactional
     override suspend fun getMySubscriberSummoner(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
         coroutineScope {
             summonerSubscriberRepository.findBySubscriberId(userId).map {
@@ -46,6 +61,7 @@ class SummonerSubscriberServiceImpl(
             }
         }
 
+    @Transactional
     override suspend fun unsubscribeSummoner(userId: Long, summonerId: Long): Unit = coroutineScope {
         val subscriber =
             summonerSubscriberRepository.findBySubscriberIdAndSummonerId(userId, summonerId) ?: throw Exception()

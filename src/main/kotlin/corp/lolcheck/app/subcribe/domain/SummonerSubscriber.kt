@@ -1,5 +1,6 @@
 package corp.lolcheck.app.subcribe.domain
 
+import corp.lolcheck.common.entity.BaseEntity
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
@@ -12,6 +13,5 @@ class SummonerSubscriber(
     var summonerId: Long,
     @Column(value = "subscriber_id")
     var subscriberId: Long
-
-) {
+) : BaseEntity() {
 }
