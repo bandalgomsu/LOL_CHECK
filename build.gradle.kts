@@ -58,8 +58,9 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("io.r2dbc:r2dbc-h2")
-    testRuntimeOnly("com.h2database:h2")
+    testImplementation("io.asyncer:r2dbc-mysql:1.0.4")
+    testRuntimeOnly("com.mysql:mysql-connector-j")
+    testCompileOnly("org.flywaydb:flyway-mysql")
 }
 
 dependencyManagement {
@@ -77,3 +78,4 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
