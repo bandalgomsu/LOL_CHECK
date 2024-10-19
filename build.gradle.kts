@@ -38,7 +38,7 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos")
 
     //MySql
-    implementation ("io.asyncer:r2dbc-mysql:1.0.4")
+    implementation("io.asyncer:r2dbc-mysql:1.0.4")
     runtimeOnly("com.mysql:mysql-connector-j")
 
     //Dotnet
@@ -49,6 +49,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     compileOnly("org.flywaydb:flyway-mysql")
 
+    //Corotines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
@@ -56,8 +58,8 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation ("io.r2dbc:r2dbc-h2")
-    testRuntimeOnly ("com.h2database:h2")
+    testImplementation("io.r2dbc:r2dbc-h2")
+    testRuntimeOnly("com.h2database:h2")
 }
 
 dependencyManagement {

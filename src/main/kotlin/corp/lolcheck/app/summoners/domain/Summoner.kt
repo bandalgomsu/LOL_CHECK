@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 class Summoner(
     @Id
     var id: Long? = null,
-    var puui: String? = null,
+    var puuid: String,
     var recentGame: LocalDateTime? = null,
     var gameName: String,
     var tagLine: String,
