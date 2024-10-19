@@ -4,8 +4,10 @@ import corp.lolcheck.app.subcribe.domain.SummonerSubscriber
 import corp.lolcheck.app.subcribe.dto.SummonerSubscriberResponse
 import corp.lolcheck.app.subcribe.repository.SummonerSubscriberRepository
 import corp.lolcheck.app.subcribe.service.interfaces.SummonerSubscriberService
+import corp.lolcheck.app.summoners.domain.Summoner
 import corp.lolcheck.app.summoners.service.interfaces.SummonerService
-import corp.lolcheck.infrastructure.riot.RiotClient
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class SummonerSubscriberServiceImpl(
     private val summonerSubscriberRepository: SummonerSubscriberRepository,
-    private val riotClient: RiotClient,
     private val summonerService: SummonerService
 ) : SummonerSubscriberService {
 
@@ -24,11 +25,19 @@ class SummonerSubscriberServiceImpl(
         userId: Long,
         summonerId: Long
     ): SummonerSubscriberResponse.SummonerSubscriberInfo = coroutineScope {
-        duplicateSummonerSubscriber(userId, summonerId)
+        val summonerDeferred = async {
+            summonerService.getSummonerById(summonerId)
+        }
+
+        val duplicateDeferred = async {
+            duplicateSummonerSubscriber(userId, summonerId)
+        }
+
+        val summoner: Summoner = awaitAll(summonerDeferred, duplicateDeferred)[0] as Summoner
 
         val subscriber: SummonerSubscriber = SummonerSubscriber(
             subscriberId = userId,
-            summonerId = summonerId,
+            summonerId = summoner.id!!
         )
 
         val save: SummonerSubscriber = summonerSubscriberRepository.save(subscriber)

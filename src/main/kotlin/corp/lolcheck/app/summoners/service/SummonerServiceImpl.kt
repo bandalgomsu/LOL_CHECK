@@ -66,4 +66,8 @@ class SummonerServiceImpl(
             tagLine = summoner.tagLine
         )
     }
+
+    override suspend fun getSummonerById(summonerId: Long): Summoner = coroutineScope {
+        summonerRepository.findById(summonerId) ?: throw Exception()
+    }
 }
