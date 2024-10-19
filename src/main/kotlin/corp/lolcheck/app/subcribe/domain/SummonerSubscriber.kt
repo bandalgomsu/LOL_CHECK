@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("summoner_subscriber")
 class SummonerSubscriber(
     @Id
-    var id: Long,
+    var id: Long? = null,
     @Column(value = "summoner_id")
     var summonerId: Long,
     @Column(value = "subscriber_id")

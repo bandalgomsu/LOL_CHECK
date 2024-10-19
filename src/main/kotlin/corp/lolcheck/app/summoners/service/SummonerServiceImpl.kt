@@ -24,7 +24,7 @@ class SummonerServiceImpl(
             tagLine = tagLine
         )
 
-        val save: Summoner = summonerRepository.save(summoner).awaitSingle()
+        val save = summonerRepository.save(summoner).awaitSingle()
 
         return SummonerResponse.SummonerInfo(
             summonerId = save.id,
@@ -39,6 +39,18 @@ class SummonerServiceImpl(
         tagLine: String
     ): SummonerResponse.SummonerInfo {
         val summoner: Summoner = summonerRepository.findByGameNameAndTagLine(gameName, tagLine)
+            .onErrorResume { exception ->
+                riotClient.getPuuid(gameName, tagLine)
+                    .flatMap {
+                        summonerRepository.save(
+                            Summoner(
+                                puuid = it.puuid,
+                                gameName = it.gameName,
+                                tagLine = it.tagLine
+                            )
+                        )
+                    }
+            }
             .awaitSingle()
 
         return SummonerResponse.SummonerInfo(
@@ -48,4 +60,5 @@ class SummonerServiceImpl(
             tagLine = summoner.tagLine
         )
     }
+
 }

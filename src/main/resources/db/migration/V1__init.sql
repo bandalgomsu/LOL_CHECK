@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS summoner_subscriber(
     id bigint not null AUTO_INCREMENT,
     summoner_id bigint not null,
-    user_id bigint not null,
+    subscriber_id bigint not null,
     created_at timestamp(6) ,
     updated_at timestamp(6) ,
     primary key (id)
