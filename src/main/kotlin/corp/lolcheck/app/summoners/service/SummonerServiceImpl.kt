@@ -2,8 +2,10 @@ package corp.lolcheck.app.summoners.service
 
 import corp.lolcheck.app.summoners.domain.Summoner
 import corp.lolcheck.app.summoners.dto.SummonerResponse
+import corp.lolcheck.app.summoners.exception.SummonerErrorCode
 import corp.lolcheck.app.summoners.repository.SummonerRepository
 import corp.lolcheck.app.summoners.service.interfaces.SummonerService
+import corp.lolcheck.common.exception.BusinessException
 import corp.lolcheck.infrastructure.riot.RiotClient
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
@@ -46,7 +48,9 @@ class SummonerServiceImpl(
         var summoner: Summoner
 
         try {
-            summoner = summonerRepository.findByGameNameAndTagLine(gameName, tagLine) ?: throw Exception()
+            summoner = summonerRepository.findByGameNameAndTagLine(gameName, tagLine) ?: throw BusinessException(
+                SummonerErrorCode.SUMMONER_NOT_FOUND
+            )
         } catch (e: Exception) {
             val puuid: String = riotClient.getPuuid(gameName, tagLine).awaitSingle().puuid
 
@@ -68,6 +72,8 @@ class SummonerServiceImpl(
     }
 
     override suspend fun getSummonerById(summonerId: Long): Summoner = coroutineScope {
-        summonerRepository.findById(summonerId) ?: throw Exception()
+        summonerRepository.findById(summonerId) ?: throw BusinessException(
+            SummonerErrorCode.SUMMONER_NOT_FOUND
+        )
     }
 }

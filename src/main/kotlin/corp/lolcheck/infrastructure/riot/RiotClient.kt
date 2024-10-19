@@ -26,7 +26,6 @@ class RiotClient(
             .uri(uri)
             .retrieve()
             .bodyToMono<RiotClientData.GetPuuidResponse>()
-
     }
 
     fun checkCurrentGameInfo(puuid: String): Mono<Boolean> {

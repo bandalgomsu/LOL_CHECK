@@ -1,7 +1,6 @@
 package corp.lolcheck.app.summoners.repository
 
 import corp.lolcheck.app.summoners.domain.Summoner
-import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -30,7 +29,7 @@ class SummonerRepositoryTest(
             tagLine = "test",
         )
 
-        val save: Summoner = summonerRepository.save(summoner).awaitSingle()
+        val save: Summoner = summonerRepository.save(summoner)
 
         Assertions.assertEquals("test", save.puuid)
         Assertions.assertEquals("test", save.gameName)
