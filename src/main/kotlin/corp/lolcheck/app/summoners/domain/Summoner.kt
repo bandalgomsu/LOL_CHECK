@@ -9,6 +9,8 @@ import java.time.LocalDateTime
 class Summoner(
     @Id
     var id: Long? = null,
+    var puui: String? = null,
     var recentGame: LocalDateTime? = null,
-    var name: String
+    var gameName: String,
+    var tagLine: String,
 ) : BaseEntity() {}
