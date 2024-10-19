@@ -49,8 +49,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     compileOnly("org.flywaydb:flyway-mysql")
 
-    //Corotines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    //Swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
