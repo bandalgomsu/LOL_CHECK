@@ -1,12 +1,13 @@
 package corp.lolcheck.app.subcribe.repository
 
 import corp.lolcheck.app.subcribe.domain.SummonerSubscriber
-import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import kotlinx.coroutines.flow.Flow
+import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import org.springframework.stereotype.Repository
-import reactor.core.publisher.Mono
 
 @Repository
-interface SummonerSubscriberRepository : ReactiveCrudRepository<SummonerSubscriber, Long> {
+interface SummonerSubscriberRepository : CoroutineCrudRepository<SummonerSubscriber, Long> {
 
-    fun findBySubscriberIdAndSummonerId(subscriberId: Long, summonerId: Long): Mono<SummonerSubscriber>
+    suspend fun findBySubscriberIdAndSummonerId(subscriberId: Long, summonerId: Long): SummonerSubscriber?
+    fun findBySubscriberId(subscriberId: Long): Flow<SummonerSubscriber>
 }

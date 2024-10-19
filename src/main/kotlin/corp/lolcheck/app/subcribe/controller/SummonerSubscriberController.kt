@@ -2,16 +2,19 @@ package corp.lolcheck.app.subcribe.controller
 
 import corp.lolcheck.app.subcribe.dto.SummonerSubscriberResponse
 import corp.lolcheck.app.subcribe.service.interfaces.SummonerSubscriberService
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import org.springframework.web.bind.annotation.*
 
 
+@Tag(name = "소환사 구독", description = "소환사 구독 정보를 관리 합니다")
 @RestController
 class SummonerSubscriberController(
     private val summonerSubscriberService: SummonerSubscriberService
 ) {
 
-    @PostMapping("/api/v1/subscribe/{summonerId}")
+    @PostMapping("/api/v1/subscribe/me/{summonerId}")
     suspend fun subscribeSummoner(
         @RequestParam userId: Long,
         @PathVariable summonerId: Long
@@ -19,7 +22,13 @@ class SummonerSubscriberController(
         summonerSubscriberService.subscribeSummoner(userId, summonerId)
     }
 
-    @DeleteMapping("/api/v1/subscribe/{summonerId}")
+    @GetMapping("/api/v1/subscribe/me")
+    suspend fun getMySubscribeSummoner(@RequestParam userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
+        coroutineScope {
+            summonerSubscriberService.getMySubscriberSummoner(userId)
+        }
+
+    @DeleteMapping("/api/v1/subscribe/me/{summonerId}")
     suspend fun unsubscribeSummoner(@RequestParam userId: Long, @PathVariable summonerId: Long) = coroutineScope {
         summonerSubscriberService.unsubscribeSummoner(userId, summonerId)
     }

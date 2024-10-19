@@ -7,7 +7,8 @@ import corp.lolcheck.app.subcribe.service.interfaces.SummonerSubscriberService
 import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.infrastructure.riot.RiotClient
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,7 +26,7 @@ class SummonerSubscriberServiceImpl(
             summonerId = summonerId,
         )
 
-        val save: SummonerSubscriber = summonerSubscriberRepository.save(subscriber).awaitSingle()
+        val save: SummonerSubscriber = summonerSubscriberRepository.save(subscriber)
 
         SummonerSubscriberResponse.SummonerSubscriberInfo(
             id = save.id!!,
@@ -34,9 +35,21 @@ class SummonerSubscriberServiceImpl(
         )
     }
 
-    override suspend fun unsubscribeSummoner(userId: Long, summonerId: Long): Unit = coroutineScope {
-        val subscriber = summonerSubscriberRepository.findBySubscriberIdAndSummonerId(userId, summonerId).awaitSingle()
+    override suspend fun getMySubscriberSummoner(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
+        coroutineScope {
+            summonerSubscriberRepository.findBySubscriberId(userId).map {
+                SummonerSubscriberResponse.SummonerSubscriberInfo(
+                    id = it.id!!,
+                    subscriberId = it.subscriberId,
+                    summonerId = it.summonerId
+                )
+            }
+        }
 
-        summonerSubscriberRepository.delete(subscriber).awaitSingle()
+    override suspend fun unsubscribeSummoner(userId: Long, summonerId: Long): Unit = coroutineScope {
+        val subscriber =
+            summonerSubscriberRepository.findBySubscriberIdAndSummonerId(userId, summonerId) ?: throw Exception()
+
+        summonerSubscriberRepository.delete(subscriber)
     }
 }
