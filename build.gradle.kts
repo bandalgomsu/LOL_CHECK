@@ -52,6 +52,9 @@ dependencies {
     //Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2")
 
+    //Fcm
+    implementation("com.google.firebase:firebase-admin:9.2.0")
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
