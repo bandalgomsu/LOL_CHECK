@@ -8,7 +8,6 @@ import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.common.exception.BusinessException
 import corp.lolcheck.infrastructure.riot.RiotClient
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,7 +21,7 @@ class SummonerServiceImpl(
     @Transactional
     override suspend fun registrySummoner(gameName: String, tagLine: String): SummonerResponse.SummonerInfo =
         coroutineScope {
-            val puuid: String = riotClient.getPuuid(gameName, tagLine).awaitSingle().puuid
+            val puuid: String = riotClient.getPuuid(gameName, tagLine).puuid
 
             val summoner: Summoner = Summoner(
                 puuid = puuid,
@@ -52,7 +51,7 @@ class SummonerServiceImpl(
                 SummonerErrorCode.SUMMONER_NOT_FOUND
             )
         } catch (e: Exception) {
-            val puuid: String = riotClient.getPuuid(gameName, tagLine).awaitSingle().puuid
+            val puuid: String = riotClient.getPuuid(gameName, tagLine).puuid
 
             summoner = summonerRepository.save(
                 Summoner(

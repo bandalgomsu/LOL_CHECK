@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS summoner(
     id bigint not null AUTO_INCREMENT,
-    puuid varchar(50) not null,
+    puuid varchar(255) not null,
     game_name varchar(20) not null,
     tag_line varchar(20) not null,
     recent_game timestamp(6),

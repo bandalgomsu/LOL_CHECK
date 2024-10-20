@@ -49,13 +49,13 @@ class SummonerServiceImplTest(
 
         coEvery {
             riotClient.getPuuid(gameName, tagLine)
-        } returns Mono.just(
-            RiotClientData.GetPuuidResponse(
-                puuid = "testPuuid",
-                tagLine = tagLine,
-                gameName = gameName
-            )
-        )
+        } returns
+                RiotClientData.GetPuuidResponse(
+                    puuid = "testPuuid",
+                    tagLine = tagLine,
+                    gameName = gameName
+                )
+
 
         coEvery {
             summonerRepository.save(any())

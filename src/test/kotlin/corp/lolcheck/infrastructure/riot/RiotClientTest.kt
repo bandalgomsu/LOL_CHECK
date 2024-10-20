@@ -1,6 +1,5 @@
 package corp.lolcheck.infrastructure.riot
 
-import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DisplayName
@@ -27,7 +26,7 @@ class RiotClientTest(
         var gameName: String = "반달곰수"
         var tagLine: String = "KR1"
 
-        val response: RiotClientData.GetPuuidResponse = riotClient.getPuuid(gameName, tagLine).awaitSingle()
+        val response: RiotClientData.GetPuuidResponse = riotClient.getPuuid(gameName, tagLine)
 
         println("PUUID = ${response.puuid}")
     }
@@ -38,10 +37,10 @@ class RiotClientTest(
         var gameName: String = "반달곰수"
         var tagLine: String = "KR1"
 
-        val response: RiotClientData.GetPuuidResponse = riotClient.getPuuid(gameName, tagLine).awaitSingle()
+        val response: RiotClientData.GetPuuidResponse = riotClient.getPuuid(gameName, tagLine)
 
         val assertThrows: WebClientResponseException =
-            assertThrows<WebClientResponseException> { riotClient.checkCurrentGameInfo(response.puuid).awaitSingle() }
+            assertThrows<WebClientResponseException> { riotClient.checkCurrentGameInfo(response.puuid) }
 
         Assertions.assertEquals(
             "404 Not Found from GET https://kr.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/GREOkFV0W3fWqj3w6MczcF8G50fElnEjKBJ6t5n_NJWdH6C2azTXxYrJ8b0ZP_3jnjr95M0agpSBpQ",
