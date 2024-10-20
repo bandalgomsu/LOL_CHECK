@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations
 import reactor.core.publisher.Mono
 
 @ExtendWith(MockKExtension::class)
-class SummonerSubscribeServiceImplTest(
+class SummonerServiceImplTest(
 ) {
 
     var summonerRepository: SummonerRepository = mockk<SummonerRepository>()
