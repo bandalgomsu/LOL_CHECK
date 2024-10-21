@@ -1,6 +1,7 @@
 package corp.lolcheck.app.summoners.domain
 
 import corp.lolcheck.common.entity.BaseEntity
+import kotlinx.coroutines.coroutineScope
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
@@ -13,4 +14,8 @@ class Summoner(
     var recentGame: LocalDateTime? = null,
     var gameName: String,
     var tagLine: String,
-) : BaseEntity() {}
+) : BaseEntity() {
+    suspend fun updateRecentGame(): Unit = coroutineScope {
+        recentGame = LocalDateTime.now()
+    }
+}
