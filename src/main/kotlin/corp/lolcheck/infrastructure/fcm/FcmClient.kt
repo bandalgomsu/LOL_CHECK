@@ -1,6 +1,5 @@
 package corp.lolcheck.infrastructure.fcm
 
-import com.google.api.core.ApiFuture
 import com.google.firebase.messaging.BatchResponse
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.MulticastMessage
@@ -13,11 +12,11 @@ class FcmClient(
     private val firebaseMessage: FirebaseMessaging
 ) {
 
-    suspend fun sendMulticastMessage(data: FcmData.FcmMulticastData, isDryRun: Boolean): ApiFuture<BatchResponse> =
+    suspend fun sendMulticastMessage(data: FcmData.FcmMulticastData, isDryRun: Boolean): BatchResponse =
         coroutineScope {
             val message: MulticastMessage = createMulticastMessage(data.tokens, data.body, data.title)
 
-            firebaseMessage.sendEachForMulticastAsync(message, isDryRun)
+            firebaseMessage.sendEachForMulticast(message, isDryRun)
         }
 
     private suspend fun createMulticastMessage(

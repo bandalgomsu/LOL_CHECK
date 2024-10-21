@@ -1,6 +1,5 @@
 package corp.lolcheck.infrastructure.fcm
 
-import com.google.api.core.ApiFuture
 import com.google.firebase.messaging.BatchResponse
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.test.runTest
@@ -32,8 +31,8 @@ class FcmClientTest(
     @Test
     @DisplayName("FCM_푸시알림_전송_성공_테스트_(INVALID 토큰 에러)")
     fun FCM_푸시알림_전송_성공_테스트() = runTest {
-        val response: ApiFuture<BatchResponse> = fcmClient.sendMulticastMessage(data, true)
+        val response: BatchResponse = fcmClient.sendMulticastMessage(data, true)
 
-        Assertions.assertEquals(1, response.get().failureCount)
+        Assertions.assertEquals(1, response.failureCount)
     }
 }
