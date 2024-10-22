@@ -81,7 +81,7 @@ class SummonerServiceImpl(
         summonerRepository.findAllLimit49OrderByUpdatedAt()
     }
 
-    override suspend fun updateSummonerRecentGameByIds(summonerIds: MutableList<Long>) = coroutineScope {
+    override suspend fun updateSummonerRecentGameByIds(summonerIds: List<Long>) = coroutineScope {
         summonerRepository.updateAllByIdIn(summonerIds)
     }
 }

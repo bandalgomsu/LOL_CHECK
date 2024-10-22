@@ -16,5 +16,5 @@ interface SummonerRepository : CoroutineCrudRepository<Summoner, Long> {
 
     @Modifying
     @Query("UPDATE summoner SET recent_game = now()")
-    suspend fun updateAllByIdIn(summonerIds: MutableList<Long>)
+    suspend fun updateAllByIdIn(summonerIds: List<Long>)
 }

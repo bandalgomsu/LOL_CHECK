@@ -13,6 +13,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -61,9 +62,9 @@ class SummonerSubscriberServiceImpl(
     }
 
     @Transactional
-    override suspend fun getMySubscriberSummoner(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
+    override suspend fun getMySubscribe(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
         coroutineScope {
-            summonerSubscriberRepository.findBySubscriberId(userId).map {
+            summonerSubscriberRepository.findAllBySubscriberId(userId).map {
                 SummonerSubscriberResponse.SummonerSubscriberInfo(
                     id = it.id!!,
                     subscriberId = it.subscriberId,
@@ -71,6 +72,25 @@ class SummonerSubscriberServiceImpl(
                 )
             }
         }
+
+    override suspend fun getSubscriberIdsBySummonerIds(summonerIds: List<Long>): List<Long> = coroutineScope {
+        summonerSubscriberRepository.findAllBySubscriberIdIn(summonerIds)
+            .map { it.subscriberId }
+            .toList()
+    }
+
+    override suspend fun getSubscriberBySummonerId(summonerId: Long): List<SummonerSubscriberResponse.SummonerSubscriberInfo> =
+        coroutineScope {
+            summonerSubscriberRepository.findAllBySummonerId(summonerId)
+                .map {
+                    SummonerSubscriberResponse.SummonerSubscriberInfo(
+                        id = it.id!!,
+                        subscriberId = it.subscriberId,
+                        summonerId = it.summonerId
+                    )
+                }.toList()
+        }
+
 
     @Transactional
     override suspend fun unsubscribeSummoner(userId: Long, summonerId: Long): Unit = coroutineScope {

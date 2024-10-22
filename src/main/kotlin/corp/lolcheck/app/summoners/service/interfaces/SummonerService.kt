@@ -13,5 +13,5 @@ interface SummonerService {
 
     suspend fun getSummonerById(summonerId: Long): Summoner
     suspend fun getSummonersLimit49(): Flow<Summoner>
-    suspend fun updateSummonerRecentGameByIds(summonerIds: MutableList<Long>)
+    suspend fun updateSummonerRecentGameByIds(summonerIds: List<Long>)
 }

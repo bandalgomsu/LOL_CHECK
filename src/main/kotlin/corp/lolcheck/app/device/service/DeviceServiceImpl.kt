@@ -49,7 +49,7 @@ class DeviceServiceImpl(
 
     }
 
-    override suspend fun getDeviceTokensByUserIds(userIds: MutableList<Long>): List<String> = coroutineScope {
+    override suspend fun getDeviceTokensByUserIds(userIds: List<Long>): List<String> = coroutineScope {
         deviceRepository.findAllByUserIdIn(userIds).map {
             it.deviceToken
         }.toList()
