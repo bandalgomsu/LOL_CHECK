@@ -20,7 +20,7 @@ class FcmClient(
         }
 
     private suspend fun createMulticastMessage(
-        tokens: MutableList<String>,
+        tokens: List<String>,
         body: String,
         title: String
     ): MulticastMessage =

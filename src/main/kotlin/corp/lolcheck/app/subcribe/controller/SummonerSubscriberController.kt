@@ -27,7 +27,7 @@ class SummonerSubscriberController(
     @GetMapping("/api/v1/subscribe/me")
     suspend fun getMySubscribeSummoner(@RequestParam userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
         coroutineScope {
-            summonerSubscriberService.getMySubscriberSummoner(userId)
+            summonerSubscriberService.getMySubscribe(userId)
         }
 
     @Operation(summary = "소환사 구독 취소", description = "소환사 구독을 취소합니다")
