@@ -49,6 +49,12 @@ class DeviceServiceImpl(
 
     }
 
+    override suspend fun getDeviceTokensByUserIds(userIds: MutableList<Long>): List<String> = coroutineScope {
+        deviceRepository.findAllByUserIdIn(userIds).map {
+            it.deviceToken
+        }.toList()
+    }
+
     @Transactional
     override suspend fun updateDevice(
         userId: Long,
@@ -63,22 +69,14 @@ class DeviceServiceImpl(
             deviceToken = device.deviceToken,
             userId = device.userId
         )
-
-
     }
 
     @Transactional
-    override suspend fun deleteDevice(userId: Long, deviceId: Long) {
+    override suspend fun deleteDevice(userId: Long, deviceId: Long) = coroutineScope {
         val device: Device = deviceRepository.findByIdAndUserId(deviceId, userId) ?: throw BusinessException(
             DeviceErrorCode.DEVICE_NOT_FOUND
         )
 
         deviceRepository.delete(device)
-    }
-
-    override suspend fun getDeviceTokensByUserIds(userIds: MutableList<Long>): List<String> = coroutineScope {
-        deviceRepository.findAllByUserIdIn(userIds).map {
-            it.deviceToken
-        }.toList()
     }
 }
