@@ -9,5 +9,8 @@ interface SummonerSubscriberService {
 
     suspend fun unsubscribeSummoner(userId: Long, summonerId: Long): Unit
 
-    suspend fun getMySubscriberSummoner(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo>
+    suspend fun getMySubscribe(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo>
+    suspend fun getSubscriberIdsBySummonerIds(summonerIds: List<Long>): List<Long>
+    suspend fun getSubscriberBySummonerId(summonerId: Long): List<SummonerSubscriberResponse.SummonerSubscriberInfo>
+
 }

@@ -8,6 +8,7 @@ import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.common.exception.BusinessException
 import corp.lolcheck.infrastructure.riot.RiotClient
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -74,5 +75,13 @@ class SummonerServiceImpl(
         summonerRepository.findById(summonerId) ?: throw BusinessException(
             SummonerErrorCode.SUMMONER_NOT_FOUND
         )
+    }
+
+    override suspend fun getSummonersLimit49(): Flow<Summoner> = coroutineScope {
+        summonerRepository.findTop49ByOrderByRecentGameDesc()
+    }
+
+    override suspend fun updateSummonerRecentGameByIds(summonerIds: List<Long>) = coroutineScope {
+        summonerRepository.updateAllByIdIn(summonerIds)
     }
 }

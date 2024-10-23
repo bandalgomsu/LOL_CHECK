@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
-import reactor.core.publisher.Mono
 
 @ExtendWith(MockKExtension::class)
 class SummonerServiceImplTest(
@@ -50,7 +49,7 @@ class SummonerServiceImplTest(
         coEvery {
             riotClient.getPuuid(gameName, tagLine)
         } returns
-                RiotClientData.GetPuuidResponse(
+                RiotClientData.PuuidGetResponse(
                     puuid = "testPuuid",
                     tagLine = tagLine,
                     gameName = gameName

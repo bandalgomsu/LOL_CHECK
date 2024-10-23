@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository
 interface SummonerSubscriberRepository : CoroutineCrudRepository<SummonerSubscriber, Long> {
 
     suspend fun findBySubscriberIdAndSummonerId(subscriberId: Long, summonerId: Long): SummonerSubscriber?
-    fun findBySubscriberId(subscriberId: Long): Flow<SummonerSubscriber>
+    suspend fun findAllBySubscriberId(subscriberId: Long): Flow<SummonerSubscriber>
+    suspend fun findAllBySubscriberIdIn(subscriberIds: List<Long>): Flow<SummonerSubscriber>
+    suspend fun findAllBySummonerId(summonerId: Long): Flow<SummonerSubscriber>
 }
