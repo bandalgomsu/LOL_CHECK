@@ -26,7 +26,7 @@ class RiotClientTest(
         var gameName: String = "반달곰수"
         var tagLine: String = "KR1"
 
-        val response: RiotClientData.GetPuuidResponse = riotClient.getPuuid(gameName, tagLine)
+        val response: RiotClientData.PuuidGetResponse = riotClient.getPuuid(gameName, tagLine)
 
         println("PUUID = ${response.puuid}")
     }
@@ -37,7 +37,7 @@ class RiotClientTest(
         var gameName: String = "반달곰수"
         var tagLine: String = "KR1"
 
-        val response: RiotClientData.GetPuuidResponse = riotClient.getPuuid(gameName, tagLine)
+        val response: RiotClientData.PuuidGetResponse = riotClient.getPuuid(gameName, tagLine)
 
         val assertThrows: WebClientResponseException =
             assertThrows<WebClientResponseException> { riotClient.checkCurrentGameInfo(response.puuid) }

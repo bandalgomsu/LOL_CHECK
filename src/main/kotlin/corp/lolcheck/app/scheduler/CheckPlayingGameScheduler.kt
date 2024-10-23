@@ -32,12 +32,10 @@ class CheckPlayingGameScheduler(
         val updatedSummoners: MutableList<Summoner> = mutableListOf()
 
         summoners.collect {
-            launch {
-                val currentGameInfo: RiotClientData.CurrentGameResponse = riotClient.checkCurrentGameInfo(it.puuid)
+            val currentGameInfo: RiotClientData.CurrentGameResponse = riotClient.checkCurrentGameInfo(it.puuid)
 
-                if (currentGameInfo.isCurrentPlayingGame) {
-                    updatedSummoners.add(it)
-                }
+            if (currentGameInfo.isCurrentPlayingGame) {
+                updatedSummoners.add(it)
             }
         }
 
