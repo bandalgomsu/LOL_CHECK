@@ -32,3 +32,8 @@ springdoc:
 fcm:
   key:
     path: google-services.json
+jwt:
+  key: ${JWT_KEY}
+  exp:
+    access: ${ACCESS_EXP}
+    refresh: ${REFRESH_EXP}

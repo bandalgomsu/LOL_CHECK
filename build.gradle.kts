@@ -30,6 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -44,7 +45,6 @@ dependencies {
     //Dotnet
     implementation("me.paulschwarz:spring-dotenv:4.0.0")
 
-
     // Flyway
     implementation("org.flywaydb:flyway-core")
     compileOnly("org.flywaydb:flyway-mysql")
@@ -54,7 +54,16 @@ dependencies {
 
     //Fcm
     implementation("com.google.firebase:firebase-admin:9.2.0")
-    
+
+    // Jwt
+    compileOnly("io.jsonwebtoken:jjwt-api:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    testImplementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    testImplementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    testImplementation("io.jsonwebtoken:jjwt-api:0.12.6")
+
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

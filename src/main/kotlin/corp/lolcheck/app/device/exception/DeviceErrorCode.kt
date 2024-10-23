@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus
 
 enum class DeviceErrorCode(val code: String, val message: String, var status: Int) : ErrorCode {
     DEVICE_NOT_FOUND("D01", "DEVICE_NOT_FOUND", HttpStatus.BAD_REQUEST.value()),
-
     ;
 
     override fun getCodeValue(): String {
