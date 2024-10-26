@@ -22,13 +22,13 @@ class JwtAuthenticationManager(
     private fun validate(token: JwtToken): Mono<Authentication> {
         jwtService.validate(token)
         val email = jwtService.getEmail(token)
-        
+
         return users.findByUsername(email)
             .flatMap {
                 Mono.just(
                     UsernamePasswordAuthenticationToken(
-                        it.username,
-                        it.password,
+                        it,
+                        null,
                         it.authorities
                     )
                 )
