@@ -37,6 +37,16 @@ class JwtService(
         )
     }
 
+    fun generateRefreshToken(): JwtToken {
+        return JwtToken(
+            Jwts.builder()
+                .issuedAt(Date.from(Instant.now()))
+                .expiration(Date.from(Instant.now().plus(accessExp, ChronoUnit.MINUTES)))
+                .signWith(key)
+                .compact()
+        )
+    }
+
     fun validate(token: JwtToken): Boolean {
         try {
             getClaims(token)
