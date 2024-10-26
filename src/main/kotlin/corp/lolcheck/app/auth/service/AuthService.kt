@@ -6,6 +6,7 @@ import corp.lolcheck.app.auth.dto.AuthRequest
 import corp.lolcheck.app.auth.dto.AuthResponse
 import corp.lolcheck.app.users.domain.User
 import corp.lolcheck.app.users.repository.UserRepository
+import corp.lolcheck.app.users.type.Role
 import corp.lolcheck.common.exception.BusinessException
 import kotlinx.coroutines.coroutineScope
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -20,7 +21,12 @@ class AuthService(
 ) {
     @Transactional
     suspend fun signUp(request: AuthRequest.SignUpRequest): AuthResponse.TokenResponse = coroutineScope {
-        val user: User = User(email = request.email, password = passwordEncoder.encode(request.password))
+        val user: User =
+            User(
+                email = request.email,
+                password = passwordEncoder.encode(request.password),
+                role = Role.USER
+            )
 
         val savedUser: User = userRepository.save(user)
 
@@ -38,8 +44,8 @@ class AuthService(
         createToken(user.email)
     }
 
-    suspend fun refresh(refreshToken: String): AuthResponse.TokenResponse = coroutineScope {
-        val token: JwtToken = JwtToken(refreshToken)
+    suspend fun refresh(request: AuthRequest.RefreshRequest): AuthResponse.TokenResponse = coroutineScope {
+        val token: JwtToken = JwtToken(request.refreshToken)
         jwtService.validate(token)
 
         createToken(jwtService.getEmail(token))
