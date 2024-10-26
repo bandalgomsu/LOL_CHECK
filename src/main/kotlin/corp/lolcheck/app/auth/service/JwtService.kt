@@ -23,8 +23,8 @@ class JwtService(
     @Value("\${jwt.exp.refresh}")
     private val refreshExp: Long,
 ) {
-    private val key: SecretKey = Keys.hmacShaKeyFor(keyValue.toByteArray())
-    private val parser: JwtParser = Jwts.parser().verifyWith(key).build()
+    private val accessKey: SecretKey = Keys.hmacShaKeyFor(keyValue.toByteArray())
+    private val parser: JwtParser = Jwts.parser().verifyWith(accessKey).build()
 
     fun generateAccessToken(email: String): JwtToken {
         return JwtToken(
@@ -32,17 +32,18 @@ class JwtService(
                 .subject(email)
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plus(accessExp, ChronoUnit.MINUTES)))
-                .signWith(key)
+                .signWith(accessKey)
                 .compact()
         )
     }
 
-    fun generateRefreshToken(): JwtToken {
+    fun generateRefreshToken(email: String): JwtToken {
         return JwtToken(
             Jwts.builder()
+                .subject(email)
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plus(accessExp, ChronoUnit.MINUTES)))
-                .signWith(key)
+                .signWith(accessKey)
                 .compact()
         )
     }

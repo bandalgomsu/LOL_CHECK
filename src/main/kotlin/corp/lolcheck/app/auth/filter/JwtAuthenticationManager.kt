@@ -1,6 +1,5 @@
 import corp.lolcheck.app.auth.service.JwtService
 import corp.lolcheck.app.auth.service.UserDetailService
-import corp.lolcheck.common.exception.BusinessException
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -21,20 +20,18 @@ class JwtAuthenticationManager(
     }
 
     private fun validate(token: JwtToken): Mono<Authentication> {
-        if (jwtService.validate(token)) {
-            val email = jwtService.getEmail(token)
-            return users.findByUsername(email)
-                .flatMap {
-                    Mono.just(
-                        UsernamePasswordAuthenticationToken(
-                            it.username,
-                            it.password,
-                            it.authorities
-                        )
+        jwtService.validate(token)
+        val email = jwtService.getEmail(token)
+        
+        return users.findByUsername(email)
+            .flatMap {
+                Mono.just(
+                    UsernamePasswordAuthenticationToken(
+                        it.username,
+                        it.password,
+                        it.authorities
                     )
-                }
-        }
-
-        throw BusinessException(AuthErrorCode.INVALID_TOKEN)
+                )
+            }
     }
 }
