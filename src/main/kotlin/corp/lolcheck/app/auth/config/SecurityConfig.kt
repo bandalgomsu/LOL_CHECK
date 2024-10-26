@@ -44,7 +44,7 @@ class SecurityConfig(
             .sessionManagement { it.ConcurrentSessionsSpec() }
             .headers { it.frameOptions { it.disable() } }
             .authorizeExchange {
-                it.pathMatchers(HttpMethod.GET, "/auth").permitAll()
+                it.pathMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                 it.pathMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                 it.anyExchange().authenticated()
             }

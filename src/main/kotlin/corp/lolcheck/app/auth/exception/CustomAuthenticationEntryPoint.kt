@@ -21,13 +21,10 @@ class CustomAuthenticationEntryPoint() : ServerAuthenticationEntryPoint {
     private val logger: Logger = LoggerFactory.getLogger(CustomAuthenticationEntryPoint::class.java)
 
     override fun commence(exchange: ServerWebExchange?, ex: AuthenticationException?): Mono<Void> {
-
         val serverHttpResponse: ServerHttpResponse = exchange!!.response
         serverHttpResponse.headers.contentType = MediaType.APPLICATION_JSON
         serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED)
 
-        logger.error("[ERROR] : UNAUTHORIZED")
-        
         return try {
             val body: String = ObjectMapper()
                 .writeValueAsString(BusinessException(AuthErrorCode.UNAUTHORIZED))
