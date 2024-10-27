@@ -34,7 +34,10 @@ class SummonerSubscriberController(
 
     @Operation(summary = "소환사 구독 취소", description = "소환사 구독을 취소합니다")
     @DeleteMapping("/api/v1/subscribe/me/{summonerId}")
-    suspend fun unsubscribeSummoner(@AuthenticationPrincipal principal: CustomUserDetails,, @PathVariable summonerId: Long) = coroutineScope {
+    suspend fun unsubscribeSummoner(
+        @AuthenticationPrincipal principal: CustomUserDetails,
+        @PathVariable summonerId: Long
+    ) = coroutineScope {
         summonerSubscriberService.unsubscribeSummoner(principal.getId(), summonerId)
     }
 }
