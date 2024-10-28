@@ -19,10 +19,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter
+import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
+import org.springframework.web.reactive.config.EnableWebFlux
 
 @Configuration
 @EnableWebFluxSecurity
+@EnableWebFlux
 class SecurityConfig(
     private val jwtService: JwtService,
     private val userDetailService: UserDetailService
@@ -34,12 +37,13 @@ class SecurityConfig(
     ): SecurityWebFilterChain {
         val filter = AuthenticationWebFilter(reactiveAuthenticationManager())
         filter.setServerAuthenticationConverter(serverAuthenticationConverter())
+        filter.setAuthenticationFailureHandler(ServerAuthenticationEntryPointFailureHandler(authenticationEntryPoint()))
 
         return http
-            .httpBasic { it.disable() }
             .csrf { it.disable() }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
+            .logout { it.disable() }
             .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
             .sessionManagement { it.ConcurrentSessionsSpec() }
             .headers { it.frameOptions { it.disable() } }
@@ -48,11 +52,11 @@ class SecurityConfig(
                 it.pathMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                 it.anyExchange().authenticated()
             }
+            .addFilterAt(filter, SecurityWebFiltersOrder.AUTHENTICATION)
             .exceptionHandling {
                 it.accessDeniedHandler(accessDeniedHandler())
                 it.authenticationEntryPoint(authenticationEntryPoint())
             }
-            .addFilterAt(filter, SecurityWebFiltersOrder.AUTHENTICATION)
             .build()
     }
 

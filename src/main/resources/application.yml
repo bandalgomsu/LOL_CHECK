@@ -8,6 +8,11 @@ spring:
     url: ${JDBC_URL}
     user: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}
+  security:
+    user:
+      password: "a"
+      name: "a"
+      roles: "ROLE_USER"
 logging:
   level:
     org.springframework.r2dbc.core: debug

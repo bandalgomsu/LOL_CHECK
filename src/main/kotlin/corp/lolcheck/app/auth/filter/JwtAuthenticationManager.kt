@@ -1,3 +1,4 @@
+import corp.lolcheck.app.auth.exception.CustomAuthenticationException
 import corp.lolcheck.app.auth.service.JwtService
 import corp.lolcheck.app.auth.service.UserDetailService
 import org.springframework.security.authentication.ReactiveAuthenticationManager
@@ -20,18 +21,20 @@ class JwtAuthenticationManager(
     }
 
     private fun validate(token: JwtToken): Mono<Authentication> {
-        jwtService.validate(token)
-        val email = jwtService.getEmail(token)
-
-        return users.findByUsername(email)
-            .flatMap {
-                Mono.just(
-                    UsernamePasswordAuthenticationToken(
-                        it,
-                        null,
-                        it.authorities
-                    )
-                )
+        return jwtService.validate(token)
+            .onErrorResume {
+                Mono.error(CustomAuthenticationException(it.message))
             }
+            .then(Mono.defer {
+                jwtService.getEmail(token)
+                    .flatMap { users.findByUsername(it) }
+                    .map {
+                        UsernamePasswordAuthenticationToken(
+                            it,
+                            null,
+                            it.authorities
+                        )
+                    }
+            })
     }
 }

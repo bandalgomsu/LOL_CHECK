@@ -1,7 +1,9 @@
 package corp.lolcheck.app.auth.service
 
+import UserErrorCode
 import corp.lolcheck.app.auth.data.CustomUserDetails
 import corp.lolcheck.app.users.repository.UserReactiveRepository
+import corp.lolcheck.common.exception.BusinessException
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
@@ -18,6 +20,7 @@ class UserDetailService(
         }
 
         return userRepository.findByEmail(email = username)
+            .onErrorResume { Mono.error(BusinessException(UserErrorCode.USER_NOT_FOUND)) }
             .flatMap { Mono.just(CustomUserDetails(it)) }
     }
 }

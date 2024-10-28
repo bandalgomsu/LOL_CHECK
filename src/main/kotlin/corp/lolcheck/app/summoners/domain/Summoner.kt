@@ -14,6 +14,7 @@ class Summoner(
     var recentGame: LocalDateTime? = null,
     var gameName: String,
     var tagLine: String,
+    var introduce: String? = null
 ) : BaseEntity() {
     suspend fun updateRecentGame(): Unit = coroutineScope {
         recentGame = LocalDateTime.now()
