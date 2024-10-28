@@ -8,6 +8,11 @@ spring:
     url: ${JDBC_URL}
     user: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}
+  security:
+    user:
+      password: "a"
+      name: "a"
+      roles: "ROLE_USER"
 logging:
   level:
     org.springframework.r2dbc.core: debug
@@ -32,3 +37,8 @@ springdoc:
 fcm:
   key:
     path: google-services.json
+jwt:
+  key: ${JWT_KEY}
+  exp:
+    access: ${ACCESS_EXP}
+    refresh: ${REFRESH_EXP}

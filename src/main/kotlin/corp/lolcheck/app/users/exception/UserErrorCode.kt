@@ -1,10 +1,10 @@
-package corp.lolcheck.app.summoners.exception
-
 import corp.lolcheck.common.exception.ErrorCode
 import org.springframework.http.HttpStatus
 
-enum class DeviceErrorCode(val code: String, val message: String, var status: Int) : ErrorCode {
-    DEVICE_NOT_FOUND("D01", "DEVICE_NOT_FOUND", HttpStatus.BAD_REQUEST.value()),
+enum class UserErrorCode(val code: String, val message: String, var status: Int) : ErrorCode {
+
+    USER_NOT_FOUND("U01", "USER_NOT_FOUND", HttpStatus.BAD_REQUEST.value()),
+    INVALID_PASSWORD("U02", "INVALID_PASSWORD", HttpStatus.BAD_REQUEST.value()),
     ;
 
     override fun getCodeValue(): String {
@@ -19,6 +19,3 @@ enum class DeviceErrorCode(val code: String, val message: String, var status: In
         return this.message
     }
 }
-
-
-

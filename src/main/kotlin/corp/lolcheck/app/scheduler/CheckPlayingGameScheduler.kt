@@ -53,8 +53,7 @@ class CheckPlayingGameScheduler(
                 val tokens: List<String> = getTokens(it)
 
                 val request = NotificationRequest.SendMulticastRequest.createPlayingGameMulticastRequest(
-                    gameName = it.gameName,
-                    tagLine = it.tagLine,
+                    summoner = it,
                     tokens = tokens
                 )
                 notificationService.sendMulticastMessage(request)

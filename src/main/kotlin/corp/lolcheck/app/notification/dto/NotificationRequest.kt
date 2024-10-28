@@ -1,5 +1,6 @@
 package corp.lolcheck.app.notification.dto
 
+import corp.lolcheck.app.summoners.domain.Summoner
 import corp.lolcheck.infrastructure.fcm.FcmData
 import kotlinx.coroutines.coroutineScope
 
@@ -11,13 +12,12 @@ class NotificationRequest {
     ) {
         companion object {
             suspend fun createPlayingGameMulticastRequest(
-                gameName: String,
-                tagLine: String,
+                summoner: Summoner,
                 tokens: List<String>
             ): SendMulticastRequest = coroutineScope {
                 SendMulticastRequest(
-                    title = gameName + " " + tagLine + "님이 게임을 시작했습니다",
-                    body = "소환사 정보를 확인해보세요 !",
+                    title = summoner.gameName + " " + summoner.tagLine + "님이 게임을 시작했습니다",
+                    body = summoner.introduce ?: (summoner.gameName + " " + summoner.tagLine + "님이 게임을 시작했습니다"),
                     tokens = tokens
                 )
             }
