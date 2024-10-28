@@ -14,9 +14,9 @@ interface SummonerRepository : CoroutineCrudRepository<Summoner, Long> {
     suspend fun findByGameNameAndTagLine(gameName: String, tagLine: String): Summoner?
 
     suspend fun findAllByGameNameExists(pageable: Pageable): Flow<Summoner>
-    suspend fun findTop49ByOrderByRecentGameDesc(): Flow<Summoner>
+    suspend fun findTop49ByOrderByRecentGameIdDesc(): Flow<Summoner>
 
     @Modifying
-    @Query("UPDATE summoner SET recent_game = NOW() WHERE id IN (:summonerIds)")
+    @Query("UPDATE summoner SET recent_game_id = 1 WHERE id IN (:summonerIds)")
     suspend fun updateAllByIdIn(@Param("summonerIds") summonerIds: List<Long>)
 }

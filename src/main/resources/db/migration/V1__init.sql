@@ -3,9 +3,10 @@ CREATE TABLE IF NOT EXISTS summoner(
     puuid varchar(255) not null,
     game_name varchar(20) not null,
     tag_line varchar(20) not null,
-    recent_game timestamp(6),
-    created_at timestamp(6) ,
-    updated_at timestamp(6) ,
+    introduce varchar(50),
+    recent_game_id bigint,
+    created_at timestamp(6),
+    updated_at timestamp(6),
     primary key (id)
 );
 

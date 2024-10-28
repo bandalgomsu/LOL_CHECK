@@ -78,7 +78,7 @@ class SummonerServiceImpl(
     }
 
     override suspend fun getSummonersLimit49(): Flow<Summoner> = coroutineScope {
-        summonerRepository.findTop49ByOrderByRecentGameDesc()
+        summonerRepository.findTop49ByOrderByRecentGameIdDesc()
     }
 
     override suspend fun updateSummonerRecentGameByIds(summonerIds: List<Long>) = coroutineScope {
