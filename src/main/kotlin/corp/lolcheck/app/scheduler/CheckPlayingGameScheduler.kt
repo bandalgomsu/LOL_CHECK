@@ -35,13 +35,13 @@ class CheckPlayingGameScheduler(
             val currentGameInfo: RiotClientData.CurrentGameResponse = riotClient.checkCurrentGameInfo(it.puuid)
 
             if (currentGameInfo.isCurrentPlayingGame) {
+                it.updateRecentGameId(currentGameInfo.gameId!!)
                 updatedSummoners.add(it)
             }
         }
 
         if (updatedSummoners.isNotEmpty()) {
-            val updateSummonerIds: List<Long> = updatedSummoners.map { it.id!! }
-            launch { summonerService.updateSummonerRecentGameByIds(updateSummonerIds) }
+            launch { summonerService.updateSummoners(updatedSummoners) }
 
             processSendMulticastMessage(updatedSummoners)
         }
