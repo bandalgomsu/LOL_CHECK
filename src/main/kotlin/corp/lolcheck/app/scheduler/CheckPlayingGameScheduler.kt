@@ -34,7 +34,7 @@ class CheckPlayingGameScheduler(
         summoners.collect {
             val currentGameInfo: RiotClientData.CurrentGameResponse = riotClient.checkCurrentGameInfo(it.puuid)
 
-            if (currentGameInfo.isCurrentPlayingGame) {
+            if (currentGameInfo.isCurrentPlayingGame && it.recentGameId != currentGameInfo.gameId) {
                 it.updateRecentGameId(currentGameInfo.gameId!!)
                 updatedSummoners.add(it)
             }
