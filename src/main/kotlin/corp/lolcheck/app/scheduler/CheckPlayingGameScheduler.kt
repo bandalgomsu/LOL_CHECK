@@ -8,9 +8,8 @@ import corp.lolcheck.app.summoners.domain.Summoner
 import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.infrastructure.riot.RiotClient
 import corp.lolcheck.infrastructure.riot.RiotClientData
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -30,18 +29,25 @@ class CheckPlayingGameScheduler(
         val summoners: Flow<Summoner> = summonerService.getSummonersLimit49()
 
         val updatedSummoners: MutableList<Summoner> = mutableListOf()
+        val jobs: MutableList<Deferred<Unit>> = mutableListOf()
 
         summoners.collect {
-            val currentGameInfo: RiotClientData.CurrentGameResponse = riotClient.checkCurrentGameInfo(it.puuid)
+            val job = async {
+                val currentGameInfo: RiotClientData.CurrentGameResponse = riotClient.checkCurrentGameInfo(it.puuid)
 
-            if (currentGameInfo.isCurrentPlayingGame) {
-                updatedSummoners.add(it)
+                if (currentGameInfo.isCurrentPlayingGame && it.recentGameId != currentGameInfo.gameId) {
+                    it.updateRecentGameId(currentGameInfo.gameId!!)
+                    updatedSummoners.add(it)
+                }
             }
+
+            jobs.add(job)
         }
 
+        jobs.awaitAll()
+        
         if (updatedSummoners.isNotEmpty()) {
-            val updateSummonerIds: List<Long> = updatedSummoners.map { it.id!! }
-            launch { summonerService.updateSummonerRecentGameByIds(updateSummonerIds) }
+            launch { summonerService.updateSummoners(updatedSummoners) }
 
             processSendMulticastMessage(updatedSummoners)
         }

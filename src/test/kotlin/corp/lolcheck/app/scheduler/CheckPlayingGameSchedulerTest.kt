@@ -32,7 +32,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
-import java.time.LocalDateTime
 
 @ExtendWith(MockKExtension::class)
 class CheckPlayingGameSchedulerTest {
@@ -56,7 +55,6 @@ class CheckPlayingGameSchedulerTest {
     val summoner: Summoner = Summoner(
         id = SUMMONER_ID,
         puuid = PUUID,
-        recentGame = LocalDateTime.now(),
         gameName = GAME_NAME,
         tagLine = TAG_LINE,
     )
@@ -101,7 +99,7 @@ class CheckPlayingGameSchedulerTest {
     fun 스케쥴러_성공_테스트() = runTest {
         coEvery { summonerService.getSummonersLimit49() } returns flow { emit(summoner) }
         coEvery { riotClient.checkCurrentGameInfo(PUUID) } returns currentGameResponse
-        coEvery { summonerService.updateSummonerRecentGameByIds(any()) } returns Unit
+        coEvery { summonerService.updateSummoners(any()) } returns Unit
         coEvery { summonerSubscriberService.getSubscriberBySummonerId(SUMMONER_ID) } returns listOf(subscriberInfo)
         coEvery { deviceService.getDeviceTokensByUserIds(listOf(USER_ID)) } returns listOf(DEVICE_TOKEN)
         coEvery { notificationService.sendMulticastMessage(any()) } returns Unit
