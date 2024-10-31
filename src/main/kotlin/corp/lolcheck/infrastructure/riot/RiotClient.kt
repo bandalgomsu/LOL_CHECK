@@ -1,5 +1,6 @@
 package corp.lolcheck.infrastructure.riot
 
+import corp.lolcheck.common.exception.BusinessException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.Logger
@@ -28,6 +29,7 @@ class RiotClient(
             .uri(uri)
             .retrieve()
             .bodyToMono<RiotClientData.PuuidGetResponse>()
+            .onErrorMap { BusinessException(RiotClientErrorCode.SUMMONER_NOT_FOUND) }
             .awaitSingle()
     }
 
