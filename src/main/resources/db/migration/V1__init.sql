@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS summoner_subscriber(
 
 CREATE TABLE IF NOT EXISTS device(
     id bigint not null AUTO_INCREMENT,
-    device_token varchar(50) not null,
+    device_token varchar(200) not null,
     user_id bigint not null,
     created_at timestamp(6) ,
     updated_at timestamp(6) ,
