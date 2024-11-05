@@ -61,8 +61,7 @@ class SummonerSubscriberServiceImpl(
         }
     }
 
-    @Transactional
-    override suspend fun getMySubscribe(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
+    override suspend fun getMySubscribes(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
         coroutineScope {
             summonerSubscriberRepository.findAllBySubscriberId(userId).map {
                 SummonerSubscriberResponse.SummonerSubscriberInfo(
@@ -77,6 +76,21 @@ class SummonerSubscriberServiceImpl(
         summonerSubscriberRepository.findAllBySubscriberIdIn(summonerIds)
             .map { it.subscriberId }
             .toList()
+    }
+
+    override suspend fun getMySubscribe(
+        userId: Long,
+        summonerId: Long
+    ): SummonerSubscriberResponse.SummonerSubscriberInfo = coroutineScope {
+        val subscriber: SummonerSubscriber =
+            summonerSubscriberRepository.findBySubscriberIdAndSummonerId(userId, summonerId)
+                ?: throw BusinessException(SummonerSubscriberErrorCode.SUMMONER_SUBSCRIBER_NOT_FOUND)
+
+        SummonerSubscriberResponse.SummonerSubscriberInfo(
+            id = subscriber.id!!,
+            subscriberId = subscriber.subscriberId,
+            summonerId = subscriber.summonerId
+        )
     }
 
     override suspend fun getSubscriberBySummonerId(summonerId: Long): List<SummonerSubscriberResponse.SummonerSubscriberInfo> =

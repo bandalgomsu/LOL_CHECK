@@ -27,11 +27,20 @@ class SummonerSubscriberController(
 
     @Operation(summary = "나의 구독 소환사 목록 조회", description = "나의 구독 소환사 목록 조회합니다")
     @GetMapping("/api/v1/subscribe/me")
-    suspend fun getMySubscribeSummoner(@AuthenticationPrincipal principal: CustomUserDetails): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
+    suspend fun getMySubscribeSummoners(@AuthenticationPrincipal principal: CustomUserDetails): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
         coroutineScope {
-            summonerSubscriberService.getMySubscribe(principal.getId())
+            summonerSubscriberService.getMySubscribes(principal.getId())
         }
 
+    @Operation(summary = "나의 구독 소환사 조회", description = "나의 구독 소환사 조회합니다")
+    @GetMapping("/api/v1/subscribe/me/{summonerId}")
+    suspend fun getMySubscribeSummoner(
+        @AuthenticationPrincipal principal: CustomUserDetails,
+        @PathVariable summonerId: Long
+    ): SummonerSubscriberResponse.SummonerSubscriberInfo =
+        coroutineScope {
+            summonerSubscriberService.getMySubscribe(principal.getId(), summonerId)
+        }
 
     @Operation(summary = "소환사 구독 취소", description = "소환사 구독을 취소합니다")
     @DeleteMapping("/api/v1/subscribe/me/{summonerId}")
