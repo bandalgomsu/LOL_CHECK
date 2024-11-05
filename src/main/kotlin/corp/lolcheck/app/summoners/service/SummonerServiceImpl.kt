@@ -36,7 +36,7 @@ class SummonerServiceImpl(
                 summonerId = save.id,
                 puuid = save.puuid,
                 gameName = save.gameName,
-                tagLine = save.tagLine
+                tagLine = save.tagLine,
             )
         }
 
@@ -67,7 +67,8 @@ class SummonerServiceImpl(
             summonerId = summoner.id,
             puuid = summoner.puuid,
             gameName = summoner.gameName,
-            tagLine = summoner.tagLine
+            tagLine = summoner.tagLine,
+            updatedAt = summoner.updatedAt
         )
     }
 
