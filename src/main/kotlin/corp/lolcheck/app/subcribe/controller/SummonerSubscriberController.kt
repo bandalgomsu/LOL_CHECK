@@ -32,6 +32,7 @@ class SummonerSubscriberController(
             summonerSubscriberService.getMySubscribe(principal.getId())
         }
 
+
     @Operation(summary = "소환사 구독 취소", description = "소환사 구독을 취소합니다")
     @DeleteMapping("/api/v1/subscribe/me/{summonerId}")
     suspend fun unsubscribeSummoner(

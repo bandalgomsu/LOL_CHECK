@@ -87,7 +87,9 @@ class SummonerServiceImpl(
     }
 
     @Transactional
-    override suspend fun updateSummoners(summoners: List<Summoner>) {
-        summonerRepository.saveAll(summoners)
+    override suspend fun updateSummoners(summoners: List<Summoner>) = coroutineScope {
+        summoners.forEach {
+            summonerRepository.save(it)
+        }
     }
 }

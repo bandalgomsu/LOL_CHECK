@@ -12,7 +12,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CheckPlayingGameScheduler(
@@ -24,7 +23,6 @@ class CheckPlayingGameScheduler(
 ) {
 
     @Scheduled(cron = "1 * * * * *")
-    @Transactional
     suspend fun checkPlayingGame(): Unit = coroutineScope {
         val summoners: Flow<Summoner> = summonerService.getSummonersLimit49()
 
@@ -37,6 +35,7 @@ class CheckPlayingGameScheduler(
 
                 if (currentGameInfo.isCurrentPlayingGame && it.recentGameId != currentGameInfo.gameId) {
                     it.updateRecentGameId(currentGameInfo.gameId!!)
+
                     updatedSummoners.add(it)
                 }
             }
@@ -45,15 +44,15 @@ class CheckPlayingGameScheduler(
         }
 
         jobs.awaitAll()
-        
+
         if (updatedSummoners.isNotEmpty()) {
             launch { summonerService.updateSummoners(updatedSummoners) }
 
-            processSendMulticastMessage(updatedSummoners)
+            launch { processSendMulticastMessage(updatedSummoners) }
         }
     }
 
-    private suspend fun processSendMulticastMessage(summoners: List<Summoner>) = coroutineScope {
+    private suspend fun processSendMulticastMessage(summoners: List<Summoner>) = supervisorScope {
         summoners.forEach {
             launch {
                 val tokens: List<String> = getTokens(it)
@@ -62,6 +61,7 @@ class CheckPlayingGameScheduler(
                     summoner = it,
                     tokens = tokens
                 )
+
                 notificationService.sendMulticastMessage(request)
             }
         }
