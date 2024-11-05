@@ -8,7 +8,10 @@ import corp.lolcheck.app.summoners.domain.Summoner
 import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.infrastructure.riot.RiotClient
 import corp.lolcheck.infrastructure.riot.RiotClientData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -46,15 +49,13 @@ class CheckPlayingGameScheduler(
         jobs.awaitAll()
 
         if (updatedSummoners.isNotEmpty()) {
-            launch { summonerService.updateSummoners(updatedSummoners) }
-
-            launch { processSendMulticastMessage(updatedSummoners) }
+            summonerService.updateSummoners(processSendMulticastMessage(updatedSummoners))
         }
     }
 
-    private suspend fun processSendMulticastMessage(summoners: List<Summoner>) = supervisorScope {
-        summoners.forEach {
-            launch {
+    private suspend fun processSendMulticastMessage(summoners: List<Summoner>): List<Summoner> = coroutineScope {
+        summoners.map {
+            async {
                 val tokens: List<String> = getTokens(it)
 
                 val request = NotificationRequest.SendMulticastRequest.createPlayingGameMulticastRequest(
@@ -63,8 +64,10 @@ class CheckPlayingGameScheduler(
                 )
 
                 notificationService.sendMulticastMessage(request)
+
+                it
             }
-        }
+        }.awaitAll()
     }
 
 
