@@ -49,7 +49,7 @@ class JwtService(
                 Jwts.builder()
                     .subject(email)
                     .issuedAt(Date.from(Instant.now()))
-                    .expiration(Date.from(Instant.now().plus(accessExp, ChronoUnit.MINUTES)))
+                    .expiration(Date.from(Instant.now().plus(refreshExp, ChronoUnit.MINUTES)))
                     .signWith(accessKey)
                     .compact()
             )
@@ -76,7 +76,7 @@ class JwtService(
                     }
 
                     else -> {
-                        Mono.error(BusinessException(AuthErrorCode.EXPIRED_TOKEN))
+                        Mono.error(BusinessException(AuthErrorCode.INVALID_TOKEN))
                     }
                 }
             }

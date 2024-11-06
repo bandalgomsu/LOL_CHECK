@@ -10,6 +10,7 @@ import corp.lolcheck.app.users.type.Role
 import corp.lolcheck.common.exception.BusinessException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -47,7 +48,8 @@ class AuthService(
 
     suspend fun refresh(request: AuthRequest.RefreshRequest): AuthResponse.TokenResponse = coroutineScope {
         val token: JwtToken = JwtToken(request.refreshToken)
-        jwtService.validate(token).awaitSingle()
+
+        jwtService.validate(token).awaitSingleOrNull()
 
         createToken(jwtService.getEmail(token).awaitSingle())
     }
