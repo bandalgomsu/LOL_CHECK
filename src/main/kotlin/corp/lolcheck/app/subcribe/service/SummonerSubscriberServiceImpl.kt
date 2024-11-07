@@ -40,7 +40,9 @@ class SummonerSubscriberServiceImpl(
 
         val subscriber: SummonerSubscriber = SummonerSubscriber(
             subscriberId = userId,
-            summonerId = summoner.id!!
+            summonerId = summoner.id!!,
+            summonerGameName = summoner.gameName,
+            summonerTagLine = summoner.tagLine,
         )
 
         val save: SummonerSubscriber = summonerSubscriberRepository.save(subscriber)
@@ -48,7 +50,9 @@ class SummonerSubscriberServiceImpl(
         SummonerSubscriberResponse.SummonerSubscriberInfo(
             id = save.id!!,
             subscriberId = save.subscriberId,
-            summonerId = save.summonerId
+            summonerId = save.summonerId,
+            summonerGameName = save.summonerGameName,
+            summonerTagLine = save.summonerTagLine,
         )
     }
 
@@ -67,7 +71,9 @@ class SummonerSubscriberServiceImpl(
                 SummonerSubscriberResponse.SummonerSubscriberInfo(
                     id = it.id!!,
                     subscriberId = it.subscriberId,
-                    summonerId = it.summonerId
+                    summonerId = it.summonerId,
+                    summonerGameName = it.summonerGameName,
+                    summonerTagLine = it.summonerTagLine,
                 )
             }
         }
@@ -89,7 +95,9 @@ class SummonerSubscriberServiceImpl(
         SummonerSubscriberResponse.SummonerSubscriberInfo(
             id = subscriber.id!!,
             subscriberId = subscriber.subscriberId,
-            summonerId = subscriber.summonerId
+            summonerId = subscriber.summonerId,
+            summonerGameName = subscriber.summonerGameName,
+            summonerTagLine = subscriber.summonerTagLine,
         )
     }
 
@@ -100,7 +108,9 @@ class SummonerSubscriberServiceImpl(
                     SummonerSubscriberResponse.SummonerSubscriberInfo(
                         id = it.id!!,
                         subscriberId = it.subscriberId,
-                        summonerId = it.summonerId
+                        summonerId = it.summonerId,
+                        summonerGameName = it.summonerGameName,
+                        summonerTagLine = it.summonerTagLine,
                     )
                 }.toList()
         }

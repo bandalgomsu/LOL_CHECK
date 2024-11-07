@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS summoner_subscriber(
     id bigint not null AUTO_INCREMENT,
     summoner_id bigint not null,
     subscriber_id bigint not null,
+    summoner_game_name varchar(50) not null,
+    summoner_tag_line varchar(50) not null,
     created_at timestamp(6) ,
     updated_at timestamp(6) ,
     primary key (id)
