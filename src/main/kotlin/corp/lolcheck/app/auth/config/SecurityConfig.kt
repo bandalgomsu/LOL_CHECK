@@ -21,11 +21,9 @@ import org.springframework.security.web.server.authentication.AuthenticationWebF
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter
 import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
-import org.springframework.web.reactive.config.EnableWebFlux
 
 @Configuration
 @EnableWebFluxSecurity
-@EnableWebFlux
 class SecurityConfig(
     private val jwtService: JwtService,
     private val userDetailService: UserDetailService
