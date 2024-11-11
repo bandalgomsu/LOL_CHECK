@@ -79,4 +79,9 @@ class DeviceServiceImpl(
 
         deviceRepository.delete(device)
     }
+
+    @Transactional
+    override suspend fun deleteAllDevice(userId: Long) = coroutineScope {
+        deviceRepository.deleteAll(deviceRepository.findAllByUserId(userId).toList());
+    }
 }

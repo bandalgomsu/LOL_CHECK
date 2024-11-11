@@ -14,4 +14,5 @@ interface DeviceService {
     ): DeviceResponse.DeviceInfo
 
     suspend fun deleteDevice(userId: Long, deviceId: Long): Unit
+    suspend fun deleteAllDevice(userId: Long): Unit
 }
