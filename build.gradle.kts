@@ -47,7 +47,7 @@ dependencies {
 
     // Flyway
     implementation("org.flywaydb:flyway-core")
-    compileOnly("org.flywaydb:flyway-mysql")
+    implementation("org.flywaydb:flyway-mysql")
 
     //Swagger
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2")
