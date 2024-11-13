@@ -38,3 +38,6 @@ jwt:
   exp:
     access: ${ACCESS_EXP}
     refresh: ${REFRESH_EXP}
+
+server:
+  port: 8081
