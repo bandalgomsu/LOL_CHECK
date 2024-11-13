@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Create Fcm Key
-        id: Create Fcm Key
+        id: Create_Fcm_Key
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: "google-services.json"
