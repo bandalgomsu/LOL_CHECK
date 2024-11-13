@@ -11,7 +11,7 @@ spring:
 
 logging:
   level:
-    org.springframework.r2dbc.core: error
+    org.springframework.r2dbc.core: debug
 
 riot:
   api:
