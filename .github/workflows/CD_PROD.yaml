@@ -21,13 +21,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: create firebase key
-        run: |
-          cd ./src/main/resources
-          touch ./google-services.json
-          echo "${{ secrets.FCM_KEY }}" > ./google-services.json
-          cat ./google-services.json
-        shell: bash
+      - name: Create Fcm Key
+        id: Create Fcm Key
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "google-services.json"
+          json: ${{ secrets.FCM_KEY }}
+          dir: 'src/main/resources/'
+
 
       - name: Gradle Caching
         uses: actions/cache@v3
