@@ -40,3 +40,4 @@ out/
 .kotlin
 *.json
 .env
+prod.env
