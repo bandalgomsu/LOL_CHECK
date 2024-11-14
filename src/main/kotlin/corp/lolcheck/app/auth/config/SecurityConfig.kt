@@ -48,6 +48,7 @@ class SecurityConfig(
             .authorizeExchange {
                 it.pathMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                 it.pathMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                it.pathMatchers(HttpMethod.GET, "/actuator/health").permitAll()
                 it.anyExchange().authenticated()
             }
             .addFilterAt(filter, SecurityWebFiltersOrder.AUTHENTICATION)
@@ -58,9 +59,8 @@ class SecurityConfig(
             .build()
     }
 
-
     @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder();
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun reactiveAuthenticationManager(

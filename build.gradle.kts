@@ -63,6 +63,8 @@ dependencies {
     testImplementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     testImplementation("io.jsonwebtoken:jjwt-api:0.12.6")
 
+    // Actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
