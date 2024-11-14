@@ -62,4 +62,4 @@ jobs:
             sudo docker rm ${{ secrets.SERVICE_NAME }}
             sudo docker rmi $(sudo docker images -q) 
             sudo docker pull ${{ secrets.DOCKER_REPO }}/${{ secrets.SERVICE_NAME }}
-            sudo docker run -i -t --env-file ./.env -p 8081:8081 -d -v ./project/log:/log --name ${{ secrets.SERVICE_NAME }} ${{ secrets.DOCKER_REPO }}/${{ secrets.SERVICE_NAME }}:latest
+            sudo docker run -i -t --env-file ./.env -p 8081:8081 -d -v /home/ubuntu/project/log:/log --name ${{ secrets.SERVICE_NAME }} ${{ secrets.DOCKER_REPO }}/${{ secrets.SERVICE_NAME }}:latest
