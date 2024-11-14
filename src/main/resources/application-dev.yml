@@ -8,7 +8,10 @@ spring:
     url: ${JDBC_URL}
     user: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}
-
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 logging:
   level:
     org.springframework.r2dbc.core: debug
