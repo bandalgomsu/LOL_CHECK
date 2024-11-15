@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/lolcheck.log.gz</file>
+        <file>log/lolcheck.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/lolcheck.log.gz.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>log/lolcheck.log.%d{yyyy-MM-dd}</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>30</maxHistory>
             <totalSizeCap>5GB</totalSizeCap>
