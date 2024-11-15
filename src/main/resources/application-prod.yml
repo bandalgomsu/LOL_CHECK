@@ -50,5 +50,10 @@ jwt:
     access: ${ACCESS_EXP}
     refresh: ${REFRESH_EXP}
 
+aws:
+  access-key: ${AWS_ACCESS_KEY}
+  secret-key: ${AWS_SECRET_KEY}
+  region: ${AWS_REGION}
+
 server:
   port: 8081
