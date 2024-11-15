@@ -26,8 +26,8 @@ class CustomAuthenticationEntryPoint : ServerAuthenticationEntryPoint {
         serverHttpResponse.headers.contentType = MediaType.APPLICATION_JSON
         serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED)
 
-        logger.error("[ERROR] : UNAUTHORIZED")
-        logger.error("[ERROR] : PATH = {}", exchange.request.path)
+//        logger.error("[ERROR] : UNAUTHORIZED")
+//        logger.error("[ERROR] : PATH = {}", exchange.request.path)
 
         return try {
             val body: String = ObjectMapper()

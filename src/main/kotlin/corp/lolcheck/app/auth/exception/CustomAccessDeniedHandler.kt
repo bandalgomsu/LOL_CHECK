@@ -25,7 +25,7 @@ class CustomAccessDeniedHandler() : ServerAccessDeniedHandler {
         serverHttpResponse.headers.contentType = MediaType.APPLICATION_JSON
         serverHttpResponse.setStatusCode(HttpStatus.FORBIDDEN)
 
-        logger.error("[ERROR] : ACCESS_DENIED")
+//        logger.error("[ERROR] : ACCESS_DENIED")
 
         return try {
             val errorByte = ObjectMapper()
