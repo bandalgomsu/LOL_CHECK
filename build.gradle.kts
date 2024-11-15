@@ -71,7 +71,6 @@ dependencies {
 
     // Mail
     implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("software.amazon.awssdk:ses:2.29.12")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

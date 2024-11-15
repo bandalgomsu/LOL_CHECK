@@ -12,7 +12,6 @@ import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.core.publisher.Mono
 
 @Component
-
 class RiotClient(
     @Value("\${riot.api.key}") private val apiKey: String,
 ) {

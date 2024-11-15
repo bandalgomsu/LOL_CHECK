@@ -1,3 +1,5 @@
+package corp.lolcheck.common.config
+
 import org.flywaydb.core.Flyway
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties
 import org.springframework.context.annotation.Bean
