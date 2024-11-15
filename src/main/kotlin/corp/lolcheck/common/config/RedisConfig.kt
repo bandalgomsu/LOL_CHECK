@@ -1,4 +1,4 @@
-package com.wait.common.config
+package corp.lolcheck.common.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
