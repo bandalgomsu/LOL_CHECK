@@ -49,6 +49,7 @@ class SecurityConfig(
                 it.pathMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                 it.pathMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                 it.pathMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                it.pathMatchers(HttpMethod.GET, "/health").permitAll()
                 it.anyExchange().authenticated()
             }
             .addFilterAt(filter, SecurityWebFiltersOrder.AUTHENTICATION)

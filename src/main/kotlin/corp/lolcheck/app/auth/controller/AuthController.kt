@@ -6,6 +6,7 @@ import corp.lolcheck.app.auth.service.AuthService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.coroutineScope
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -15,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val authService: AuthService,
 ) {
+
+    @GetMapping("/health")
+    suspend fun health(): String {
+        return "health"
+    }
 
     @Operation(summary = "회원가입", description = "Email , Password를 통해서 회원가입을 합니다")
     @PostMapping("/api/v1/auth/signUp")
