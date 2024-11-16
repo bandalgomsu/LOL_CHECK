@@ -42,7 +42,7 @@ class AuthController(
         }
 
     @Operation(summary = "회원가입 인증 메일 검증", description = "회원가입 인증 메일을 검증합니다.")
-    @PostMapping("/api/v1/auth/signUp/mail/verified")
+    @PostMapping("/api/v1/auth/signUp/mail/verify")
     suspend fun verifySignUpMail(@RequestBody request: MailRequest.VerifySignUpMailRequest): MailResponse.VerifySignUpMailResponse =
         coroutineScope {
             mailService.verifySignUpEmail(request.email, request.authNumber)

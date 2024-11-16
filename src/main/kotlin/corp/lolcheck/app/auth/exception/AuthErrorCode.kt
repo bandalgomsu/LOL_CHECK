@@ -10,6 +10,8 @@ enum class AuthErrorCode(val code: String, val message: String, var status: Int)
     UNAUTHORIZED("A05", "INVALID_TOKEN", HttpStatus.UNAUTHORIZED.value()),
     NOT_FOUND_AUTH_NUMBER("A06", "NOT_FOUND_AUTH_NUMBER", HttpStatus.UNAUTHORIZED.value()),
     NOT_MATCHED_AUTH_NUMBER("A07", "NOT_MATCHED_AUTH_NUMBER", HttpStatus.UNAUTHORIZED.value()),
+    NOT_VERIFIED_USER("A08", "NOT_VERIFIED_USER", HttpStatus.UNAUTHORIZED.value()),
+    DUPLICATE_EMAIL("A09", "DUPLICATE_EMAIL", HttpStatus.UNAUTHORIZED.value()),
     ;
 
     override fun getCodeValue(): String {

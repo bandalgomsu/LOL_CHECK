@@ -1,13 +1,19 @@
 package corp.lolcheck.app.auth.service
 
+import AuthErrorCode
 import JwtToken
 import UserErrorCode
+import corp.lolcheck.app.auth.data.AuthRedisKey
 import corp.lolcheck.app.auth.dto.AuthRequest
 import corp.lolcheck.app.auth.dto.AuthResponse
 import corp.lolcheck.app.users.domain.User
 import corp.lolcheck.app.users.repository.UserRepository
 import corp.lolcheck.app.users.type.Role
 import corp.lolcheck.common.exception.BusinessException
+import corp.lolcheck.common.util.MailValidator
+import corp.lolcheck.infrastructure.redis.RedisClient
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
@@ -20,9 +26,15 @@ class AuthService(
     private val jwtService: JwtService,
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val redisClient: RedisClient,
 ) {
     @Transactional
     suspend fun signUp(request: AuthRequest.SignUpRequest): AuthResponse.TokenResponse = coroutineScope {
+        listOf(
+            async { MailValidator.validateEmail(email = request.email) },
+            async { checkIsVerifiedUser(email = request.email) },
+            async { checkIsDuplicatedEmail(email = request.email) }
+        ).awaitAll()
 
         val user: User =
             User(
@@ -34,6 +46,15 @@ class AuthService(
         val savedUser: User = userRepository.save(user)
 
         createToken(user.email)
+    }
+
+    private suspend fun checkIsVerifiedUser(email: String) = coroutineScope {
+        redisClient.getData(AuthRedisKey.IS_VERIFIED_USER.combineKeyValue(email), String::class)
+            ?: throw BusinessException(AuthErrorCode.NOT_VERIFIED_USER)
+    }
+
+    private suspend fun checkIsDuplicatedEmail(email: String) = coroutineScope {
+        userRepository.findByEmail(email) ?: throw BusinessException(AuthErrorCode.DUPLICATE_EMAIL)
     }
 
     suspend fun login(request: AuthRequest.LoginRequest): AuthResponse.TokenResponse = coroutineScope {
