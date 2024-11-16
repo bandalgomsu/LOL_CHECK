@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.toList
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+private const val MAX_SUBSCRIBE_COUNT = 2
+
 @Service
 class SummonerSubscriberServiceImpl(
     private val summonerSubscriberRepository: SummonerSubscriberRepository,
@@ -28,6 +30,10 @@ class SummonerSubscriberServiceImpl(
         userId: Long,
         summonerId: Long
     ): SummonerSubscriberResponse.SummonerSubscriberInfo = coroutineScope {
+        if (summonerSubscriberRepository.findAllBySubscriberId(userId).toList().count() >= MAX_SUBSCRIBE_COUNT) {
+            throw BusinessException(SummonerSubscriberErrorCode.MAX_COUNT_SUBSCRIBE)
+        }
+
         val summonerDeferred = async {
             summonerService.getSummonerById(summonerId)
         }
