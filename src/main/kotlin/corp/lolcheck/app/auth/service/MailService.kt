@@ -61,7 +61,7 @@ class MailService(
             helper.setText(content, true)
             CoroutineScope(Dispatchers.IO + Job()).launch { mailSender.send(message) }
 
-            redisClient.setData("${AuthRedisKey.SIGN_UP_VERIFYING_MAIL.value}_$to", authNumber, 3)
+            redisClient.setData(AuthRedisKey.SIGN_UP_VERIFYING_MAIL.combineKeyValue(to), authNumber, 3)
 
             authNumber
         }
@@ -70,7 +70,7 @@ class MailService(
         coroutineScope {
             MailValidator.validateEmail(email)
 
-            val redisKey: String = "${AuthRedisKey.SIGN_UP_VERIFYING_MAIL.value}_$email"
+            val redisKey: String = AuthRedisKey.SIGN_UP_VERIFYING_MAIL.combineKeyValue(email)
 
             val authNumber: String =
                 redisClient.getData(redisKey, String::class)
@@ -84,7 +84,7 @@ class MailService(
 
             listOf(
                 async { redisClient.deleteData(redisKey) },
-                async { redisClient.setData("${AuthRedisKey.IS_VERIFIED_USER.value}_${email}", email, 3) }
+                async { redisClient.setData(AuthRedisKey.IS_VERIFIED_USER.combineKeyValue(email), email, 3) }
             ).awaitAll()
 
             MailResponse.VerifySignUpMailResponse(
