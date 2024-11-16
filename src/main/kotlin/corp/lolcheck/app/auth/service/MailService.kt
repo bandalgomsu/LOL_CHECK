@@ -1,6 +1,7 @@
 package corp.lolcheck.app.auth.service
 
 import AuthErrorCode
+import corp.lolcheck.app.auth.data.AuthRedisKey
 import corp.lolcheck.app.auth.dto.MailResponse
 import corp.lolcheck.common.exception.BusinessException
 import corp.lolcheck.infrastructure.redis.RedisClient
@@ -11,8 +12,6 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 import java.util.*
-
-private const val SIGN_UP_MAIL_KEY: String = "SIGN_UP_MAIL_"
 
 @Service
 class MailService(
@@ -62,7 +61,7 @@ class MailService(
             helper.setText(content, true)
             CoroutineScope(Dispatchers.IO + Job()).launch { mailSender.send(message) }
 
-            redisClient.setData("$SIGN_UP_MAIL_KEY$to", authNumber, 3)
+            redisClient.setData("${AuthRedisKey.SIGN_UP_VERIFYING_MAIL.value}_$to", authNumber, 3)
 
             authNumber
         }
@@ -71,7 +70,7 @@ class MailService(
         coroutineScope {
             validateEmail(email)
 
-            val redisKey: String = "$SIGN_UP_MAIL_KEY$email"
+            val redisKey: String = "${AuthRedisKey.SIGN_UP_VERIFYING_MAIL.value}_$email"
 
             val authNumber: String =
                 redisClient.getData(redisKey, String::class)
@@ -83,7 +82,10 @@ class MailService(
                 throw BusinessException(AuthErrorCode.NOT_MATCHED_AUTH_NUMBER)
             }
 
-            redisClient.deleteData(redisKey)
+            listOf(
+                async { redisClient.deleteData(redisKey) },
+                async { redisClient.setData("${AuthRedisKey.IS_VERIFIED_USER.value}_${email}", email, 3) }
+            ).awaitAll()
 
             MailResponse.VerifySignUpMailResponse(
                 email = email,
