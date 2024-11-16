@@ -5,6 +5,7 @@ import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Component
 import java.time.Duration
+import kotlin.reflect.KClass
 
 @Component
 class RedisClient(
@@ -23,10 +24,10 @@ class RedisClient(
             .awaitSingle()
     }
 
-    suspend fun getData(key: String): Any = coroutineScope {
+    suspend fun <T : Any> getData(key: String, type: KClass<T>): T? = coroutineScope {
         redisTemplate.opsForValue()
             .get(key)
-            .awaitSingle()
+            .awaitSingle() as T
     }
 
     suspend fun deleteData(key: String): Boolean = coroutineScope {

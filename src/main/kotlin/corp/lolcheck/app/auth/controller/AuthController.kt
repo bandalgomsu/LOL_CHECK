@@ -2,7 +2,11 @@ package corp.lolcheck.app.auth.controller
 
 import corp.lolcheck.app.auth.dto.AuthRequest
 import corp.lolcheck.app.auth.dto.AuthResponse
+import corp.lolcheck.app.auth.dto.MailRequest
+import corp.lolcheck.app.auth.dto.MailResponse
 import corp.lolcheck.app.auth.service.AuthService
+import corp.lolcheck.app.auth.service.MailService
+import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.coroutineScope
@@ -15,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class AuthController(
     private val authService: AuthService,
+    private val mailService: MailService
 ) {
 
     @GetMapping("/health")
+    @Hidden
     suspend fun health(): String {
         return "health"
     }
@@ -27,6 +33,20 @@ class AuthController(
     suspend fun signUp(@RequestBody request: AuthRequest.SignUpRequest): AuthResponse.TokenResponse = coroutineScope {
         authService.signUp(request)
     }
+
+    @Operation(summary = "회원가입 인증 메일 발송", description = "회원가입 인증 메일을 발송합니다.")
+    @PostMapping("/api/v1/auth/signUp/mail")
+    suspend fun sendSignUpVerifyingMail(@RequestBody request: MailRequest.SendSignUpVerifyingMailRequest): MailResponse.SendSignUpVerifyingMailResponse =
+        coroutineScope {
+            mailService.sendSignUpVerifyingMail(request.email)
+        }
+
+    @Operation(summary = "회원가입 인증 메일 검증", description = "회원가입 인증 메일을 검증합니다.")
+    @PostMapping("/api/v1/auth/signUp/mail/verified")
+    suspend fun verifySignUpMail(@RequestBody request: MailRequest.VerifySignUpMailRequest): MailResponse.VerifySignUpMailResponse =
+        coroutineScope {
+            mailService.verifySignUpEmail(request.email, request.authNumber)
+        }
 
     @Operation(summary = "로그인", description = "Email , Password를 통해서 로그인을 합니다")
     @PostMapping("/api/v1/auth/login")

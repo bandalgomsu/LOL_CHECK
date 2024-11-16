@@ -71,6 +71,7 @@ dependencies {
 
     // Mail
     implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("commons-validator:commons-validator:1.7")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
