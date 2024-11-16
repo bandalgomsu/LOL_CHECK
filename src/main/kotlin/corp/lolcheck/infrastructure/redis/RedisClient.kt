@@ -2,6 +2,7 @@ package corp.lolcheck.infrastructure.redis
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.stereotype.Component
 import java.time.Duration
@@ -27,7 +28,7 @@ class RedisClient(
     suspend fun <T : Any> getData(key: String, type: KClass<T>): T? = coroutineScope {
         redisTemplate.opsForValue()
             .get(key)
-            .awaitSingle() as T
+            .awaitSingleOrNull() as T?
     }
 
     suspend fun deleteData(key: String): Boolean = coroutineScope {

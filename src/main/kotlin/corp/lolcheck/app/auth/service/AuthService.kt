@@ -32,8 +32,8 @@ class AuthService(
     suspend fun signUp(request: AuthRequest.SignUpRequest): AuthResponse.TokenResponse = coroutineScope {
         listOf(
             async { MailValidator.validateEmail(email = request.email) },
-            async { checkIsVerifiedUser(email = request.email) },
-            async { checkIsDuplicatedEmail(email = request.email) }
+            async { checkIsDuplicatedEmail(email = request.email) },
+            async { checkIsVerifiedUser(email = request.email) }
         ).awaitAll()
 
         val user: User =
@@ -45,7 +45,7 @@ class AuthService(
 
         val savedUser: User = userRepository.save(user)
 
-        createToken(user.email)
+        createToken(savedUser.email)
     }
 
     private suspend fun checkIsVerifiedUser(email: String) = coroutineScope {
@@ -54,7 +54,9 @@ class AuthService(
     }
 
     private suspend fun checkIsDuplicatedEmail(email: String) = coroutineScope {
-        userRepository.findByEmail(email) ?: throw BusinessException(AuthErrorCode.DUPLICATE_EMAIL)
+        if (userRepository.findByEmail(email) != null) {
+            throw BusinessException(AuthErrorCode.DUPLICATE_EMAIL)
+        }
     }
 
     suspend fun login(request: AuthRequest.LoginRequest): AuthResponse.TokenResponse = coroutineScope {
