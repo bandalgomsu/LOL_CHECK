@@ -4,10 +4,10 @@ import AuthErrorCode
 import corp.lolcheck.app.auth.data.AuthRedisKey
 import corp.lolcheck.app.auth.dto.MailResponse
 import corp.lolcheck.common.exception.BusinessException
+import corp.lolcheck.common.util.MailValidator
 import corp.lolcheck.infrastructure.redis.RedisClient
 import jakarta.mail.internet.MimeMessage
 import kotlinx.coroutines.*
-import org.apache.commons.validator.routines.EmailValidator
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
@@ -20,7 +20,7 @@ class MailService(
 ) {
 
     suspend fun sendSignUpVerifyingMail(email: String): MailResponse.SendSignUpVerifyingMailResponse = coroutineScope {
-        validateEmail(email)
+        MailValidator.validateEmail(email)
 
         val authNumber = makeRandomNumber()
 
@@ -68,7 +68,7 @@ class MailService(
 
     suspend fun verifySignUpEmail(email: String, inputAuthNumber: String): MailResponse.VerifySignUpMailResponse =
         coroutineScope {
-            validateEmail(email)
+            MailValidator.validateEmail(email)
 
             val redisKey: String = "${AuthRedisKey.SIGN_UP_VERIFYING_MAIL.value}_$email"
 
@@ -92,10 +92,4 @@ class MailService(
                 isVerified = isVerified
             )
         }
-
-    private suspend fun validateEmail(email: String) = coroutineScope {
-        if (!EmailValidator.getInstance().isValid(email)) {
-            throw BusinessException(AuthErrorCode.INVALID_EMAIL)
-        }
-    }
 }

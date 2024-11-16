@@ -23,6 +23,7 @@ class AuthService(
 ) {
     @Transactional
     suspend fun signUp(request: AuthRequest.SignUpRequest): AuthResponse.TokenResponse = coroutineScope {
+
         val user: User =
             User(
                 email = request.email,
