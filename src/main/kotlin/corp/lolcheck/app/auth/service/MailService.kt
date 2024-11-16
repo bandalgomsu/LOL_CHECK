@@ -33,7 +33,7 @@ class MailService(
 
         mailSend(to = email, title = title, content = content, authNumber = authNumber)
 
-        MailResponse.SendSignUpVerifyingMailResponse(authNumber)
+        MailResponse.SendSignUpVerifyingMailResponse("NUMBER")
     }
 
     private suspend fun makeRandomNumber(): String = coroutineScope {
