@@ -23,6 +23,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.MockitoAnnotations
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 @ExtendWith(MockKExtension::class)
@@ -43,8 +44,8 @@ class DeviceServiceImplTest() {
     }
 
     @Test
-    @DisplayName("디바이스_생성_성공_테스트")
-    fun 디바이스_생성_성공_테스트() = runTest {
+    @DisplayName("CREATE_DEVICE_SUCCESS")
+    fun CREATE_DEVICE_SUCCESS() = runTest {
         val request = DeviceRequest.DeviceCreateRequest(
             deviceToken = DEVICE_TOKEN
         )
@@ -59,8 +60,8 @@ class DeviceServiceImplTest() {
     }
 
     @Test
-    @DisplayName("유저아이디를_통한_디바이스_정보_조회")
-    fun 유저아이디를_통한_디바이스_정보_조회() = runTest {
+    @DisplayName("GET_DEVICES_INFO_BY_USER_ID_SUCCESS")
+    fun GET_DEVICES_INFO_BY_USER_ID_SUCCESS() = runTest {
         coEvery { deviceRepository.findAllByUserId(USER_ID) } returns flow { emit(device) }
 
         val responseList: List<DeviceResponse.DeviceInfo> = deviceService.getDevicesInfoByUserId(USER_ID)
@@ -73,8 +74,8 @@ class DeviceServiceImplTest() {
     }
 
     @Test
-    @DisplayName("유저아이디_리스트를_통한_디바이스_토큰_리스트_조회")
-    fun 저아이디_리스트를_통한_디바이스_토큰_리스트_조회() = runTest {
+    @DisplayName("GET_DEVICE_TOKENS_BY_USER_IDS_SUCCESS")
+    fun GET_DEVICE_TOKENS__BY_USER_IDS_SUCCESS() = runTest {
         val userIds: MutableList<Long> = mutableListOf(USER_ID)
         coEvery { deviceRepository.findAllByUserIdIn(userIds) } returns flow { emit(device) }
 
@@ -85,8 +86,8 @@ class DeviceServiceImplTest() {
     }
 
     @Test
-    @DisplayName("디바이스_수정_성공_테스트")
-    fun 디바이스_수정_성공_테스트() = runTest {
+    @DisplayName("UPDATE_DEVICE_SUCCESS")
+    fun UPDATE_DEVICE_SUCCESS() = runTest {
         val request = DeviceRequest.DeviceUpdateRequest(
             deviceToken = UPDATE_DEVICE_TOKEN
         )
@@ -104,8 +105,8 @@ class DeviceServiceImplTest() {
     }
 
     @Test
-    @DisplayName("디바이스_수정_실패_테스트_존재하지_않는_디바이스")
-    fun 디바이스_수정_실패_테스트_존재하지_않는_디바이스() = runTest {
+    @DisplayName("UPDATE_DEVICE_FAILURE_THROW_BY_DEVICE_NOT_FOUND")
+    fun UPDATE_DEVICE_FAILURE_THROW_BY_DEVICE_NOT_FOUND() = runTest {
         val request = DeviceRequest.DeviceUpdateRequest(
             deviceToken = UPDATE_DEVICE_TOKEN
         )
@@ -115,13 +116,18 @@ class DeviceServiceImplTest() {
                 DEVICE_ID,
                 USER_ID
             )
-        } throws BusinessException(DeviceErrorCode.DEVICE_NOT_FOUND)
-        assertFailsWith<BusinessException> { deviceService.updateDevice(USER_ID, DEVICE_ID, request) }
+        } returns null
+
+        val exception = assertFailsWith<BusinessException> { deviceService.updateDevice(USER_ID, DEVICE_ID, request) }
+
+        assertEquals(DeviceErrorCode.DEVICE_NOT_FOUND.code, exception.errorCode.getCodeValue())
+        assertEquals(DeviceErrorCode.DEVICE_NOT_FOUND.message, exception.errorCode.getMessageValue())
+        assertEquals(DeviceErrorCode.DEVICE_NOT_FOUND.status, exception.errorCode.getStatusValue())
     }
 
     @Test
-    @DisplayName("디바이스_삭제_성공_테스트")
-    fun 디바이스_삭제_성공_테스트() = runTest {
+    @DisplayName("DEVICE_DELETE_SUCCESS")
+    fun DEVICE_DELETE_SUCCESS() = runTest {
         coEvery { deviceRepository.findByIdAndUserId(DEVICE_ID, USER_ID) } returns device
         coEvery { deviceRepository.delete(device) } returns Unit
 
@@ -130,15 +136,28 @@ class DeviceServiceImplTest() {
     }
 
     @Test
-    @DisplayName("디바이스_삭제_실패_테스트_존재하지_않는_디바이스")
-    fun 디바이스_삭제_실패_테스트_존재하지_않는_디바이스() = runTest {
+    @DisplayName("DEVICE_DELETE_FAILURE_THROW_BY_DEVICE_NOT_FOUND")
+    fun DEVICE_DELETE_FAILURE_THROW_BY_DEVICE_NOT_FOUND() = runTest {
         coEvery {
             deviceRepository.findByIdAndUserId(
                 DEVICE_ID,
                 USER_ID
             )
-        } throws BusinessException(DeviceErrorCode.DEVICE_NOT_FOUND)
+        } returns null
 
-        assertFailsWith<BusinessException> { deviceService.deleteDevice(USER_ID, DEVICE_ID) }
+        val exception = assertFailsWith<BusinessException> { deviceService.deleteDevice(USER_ID, DEVICE_ID) }
+        assertEquals(DeviceErrorCode.DEVICE_NOT_FOUND.code, exception.errorCode.getCodeValue())
+        assertEquals(DeviceErrorCode.DEVICE_NOT_FOUND.message, exception.errorCode.getMessageValue())
+        assertEquals(DeviceErrorCode.DEVICE_NOT_FOUND.status, exception.errorCode.getStatusValue())
+    }
+
+    @Test
+    @DisplayName("DEVICE_DELETE_ALL_SUCCESS")
+    fun DEVICE_DELETE_ALL_SUCCESS() = runTest {
+        coEvery { deviceRepository.findAllByUserId(USER_ID) } returns flow { emit(device) }
+        coEvery { deviceRepository.deleteAll(any()) } returns Unit
+
+        deviceService.deleteAllDevice(USER_ID)
+        coVerify(exactly = 1) { deviceRepository.deleteAll(any()) }
     }
 }
