@@ -45,23 +45,22 @@ class SummonerServiceImpl(
         gameName: String,
         tagLine: String
     ): SummonerResponse.SummonerInfo = coroutineScope {
-        var summoner: Summoner
-
-        try {
-            summoner = summonerRepository.findByGameNameAndTagLine(gameName, tagLine) ?: throw BusinessException(
-                SummonerErrorCode.SUMMONER_NOT_FOUND
-            )
-        } catch (e: Exception) {
-            val puuid: String = riotClient.getPuuid(gameName, tagLine).puuid
-
-            summoner = summonerRepository.save(
-                Summoner(
-                    puuid = puuid,
-                    gameName = gameName,
-                    tagLine = tagLine
+        val summoner: Summoner =
+            try {
+                summonerRepository.findByGameNameAndTagLine(gameName, tagLine) ?: throw BusinessException(
+                    SummonerErrorCode.SUMMONER_NOT_FOUND
                 )
-            )
-        }
+            } catch (e: Exception) {
+                val puuid: String = riotClient.getPuuid(gameName, tagLine).puuid
+
+                summonerRepository.save(
+                    Summoner(
+                        puuid = puuid,
+                        gameName = gameName,
+                        tagLine = tagLine
+                    )
+                )
+            }
 
         SummonerResponse.SummonerInfo(
             summonerId = summoner.id,

@@ -62,14 +62,14 @@ class CheckPlayingGameSchedulerTest {
     val subscriber: SummonerSubscriber = SummonerSubscriber(
         id = SUMMONER_SUBSCRIBER_ID,
         subscriberId = USER_ID,
-        summonerId = SUMMONER_ID
+        summonerId = SUMMONER_ID,
     )
 
     val subscriberInfo: SummonerSubscriberResponse.SummonerSubscriberInfo =
         SummonerSubscriberResponse.SummonerSubscriberInfo(
             id = SUMMONER_SUBSCRIBER_ID,
             subscriberId = USER_ID,
-            summonerId = SUMMONER_ID
+            summonerId = SUMMONER_ID,
         )
 
     val currentGameResponse: RiotClientData.CurrentGameResponse = RiotClientData.CurrentGameResponse(

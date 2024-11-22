@@ -42,7 +42,7 @@ class SummonerSubscriberServiceImplTest(
         id = summonerId,
         puuid = "test",
         gameName = gameName,
-        tagLine = tagLine
+        tagLine = tagLine,
     )
 
     val summonerSubscriber: SummonerSubscriber = SummonerSubscriber(

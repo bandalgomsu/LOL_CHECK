@@ -13,9 +13,5 @@ class SummonerSubscriber(
     var summonerId: Long,
     @Column(value = "subscriber_id")
     var subscriberId: Long,
-    @Column(value = "summoner_game_name")
-    var summonerGameName: String,
-    @Column(value = "summoner_tag_line")
-    var summonerTagLine: String,
 ) : BaseEntity() {
 }

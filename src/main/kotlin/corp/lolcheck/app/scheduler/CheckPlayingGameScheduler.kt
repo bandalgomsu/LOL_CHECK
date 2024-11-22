@@ -24,7 +24,7 @@ class CheckPlayingGameScheduler(
     private val summonerSubscriberService: SummonerSubscriberService,
     private val deviceService: DeviceService,
 ) {
-
+    
     @Scheduled(cron = "1 * * * * *")
     suspend fun checkPlayingGame(): Unit = coroutineScope {
         val summoners: Flow<Summoner> = summonerService.getSummonersLimit49()

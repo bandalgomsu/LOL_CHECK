@@ -8,6 +8,23 @@ spring:
     url: ${JDBC_URL}
     user: ${JDBC_USERNAME}
     password: ${JDBC_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+  mail:
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+
+management:
+  health:
+    db:
+      enabled: false
+    redis:
+      enabled: false
+
 logging:
   level:
     org.springframework.r2dbc.core: debug
@@ -32,3 +49,9 @@ springdoc:
 fcm:
   key:
     path: google-services.json
+
+jwt:
+  key: ${JWT_KEY}
+  exp:
+    access: ${ACCESS_EXP}
+    refresh: ${REFRESH_EXP}

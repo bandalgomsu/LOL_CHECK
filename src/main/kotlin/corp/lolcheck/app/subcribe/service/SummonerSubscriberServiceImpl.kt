@@ -47,8 +47,6 @@ class SummonerSubscriberServiceImpl(
         val subscriber: SummonerSubscriber = SummonerSubscriber(
             subscriberId = userId,
             summonerId = summoner.id!!,
-            summonerGameName = summoner.gameName,
-            summonerTagLine = summoner.tagLine,
         )
 
         val save: SummonerSubscriber = summonerSubscriberRepository.save(subscriber)
@@ -57,8 +55,8 @@ class SummonerSubscriberServiceImpl(
             id = save.id!!,
             subscriberId = save.subscriberId,
             summonerId = save.summonerId,
-            summonerGameName = save.summonerGameName,
-            summonerTagLine = save.summonerTagLine,
+            summonerGameName = summoner.gameName,
+            summonerTagLine = summoner.tagLine,
         )
     }
 
@@ -74,12 +72,14 @@ class SummonerSubscriberServiceImpl(
     override suspend fun getMySubscribes(userId: Long): Flow<SummonerSubscriberResponse.SummonerSubscriberInfo> =
         coroutineScope {
             summonerSubscriberRepository.findAllBySubscriberId(userId).map {
+                val summoner = summonerService.getSummonerById(it.summonerId)
+
                 SummonerSubscriberResponse.SummonerSubscriberInfo(
                     id = it.id!!,
                     subscriberId = it.subscriberId,
                     summonerId = it.summonerId,
-                    summonerGameName = it.summonerGameName,
-                    summonerTagLine = it.summonerTagLine,
+                    summonerGameName = summoner.gameName,
+                    summonerTagLine = summoner.tagLine
                 )
             }
         }
@@ -98,12 +98,14 @@ class SummonerSubscriberServiceImpl(
             summonerSubscriberRepository.findBySubscriberIdAndSummonerId(userId, summonerId)
                 ?: throw BusinessException(SummonerSubscriberErrorCode.SUMMONER_SUBSCRIBER_NOT_FOUND)
 
+        val summoner = summonerService.getSummonerById(subscriber.summonerId)
+
         SummonerSubscriberResponse.SummonerSubscriberInfo(
             id = subscriber.id!!,
             subscriberId = subscriber.subscriberId,
             summonerId = subscriber.summonerId,
-            summonerGameName = subscriber.summonerGameName,
-            summonerTagLine = subscriber.summonerTagLine,
+            summonerGameName = summoner.gameName,
+            summonerTagLine = summoner.tagLine,
         )
     }
 
@@ -111,12 +113,14 @@ class SummonerSubscriberServiceImpl(
         coroutineScope {
             summonerSubscriberRepository.findAllBySummonerId(summonerId)
                 .map {
+                    val summoner = summonerService.getSummonerById(it.summonerId)
+
                     SummonerSubscriberResponse.SummonerSubscriberInfo(
                         id = it.id!!,
                         subscriberId = it.subscriberId,
                         summonerId = it.summonerId,
-                        summonerGameName = it.summonerGameName,
-                        summonerTagLine = it.summonerTagLine,
+                        summonerGameName = summoner.gameName,
+                        summonerTagLine = summoner.tagLine
                     )
                 }.toList()
         }
