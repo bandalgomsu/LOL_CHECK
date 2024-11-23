@@ -51,13 +51,7 @@ class SummonerSubscriberServiceImpl(
 
         val save: SummonerSubscriber = summonerSubscriberRepository.save(subscriber)
 
-        SummonerSubscriberResponse.SummonerSubscriberInfo(
-            id = save.id!!,
-            subscriberId = save.subscriberId,
-            summonerId = save.summonerId,
-            summonerGameName = summoner.gameName,
-            summonerTagLine = summoner.tagLine,
-        )
+        SummonerSubscriberResponse.SummonerSubscriberInfo.of(save, summoner)
     }
 
     private suspend fun duplicateSummonerSubscriber(
@@ -74,13 +68,7 @@ class SummonerSubscriberServiceImpl(
             summonerSubscriberRepository.findAllBySubscriberId(userId).map {
                 val summoner = summonerService.getSummonerById(it.summonerId)
 
-                SummonerSubscriberResponse.SummonerSubscriberInfo(
-                    id = it.id!!,
-                    subscriberId = it.subscriberId,
-                    summonerId = it.summonerId,
-                    summonerGameName = summoner.gameName,
-                    summonerTagLine = summoner.tagLine
-                )
+                SummonerSubscriberResponse.SummonerSubscriberInfo.of(it, summoner)
             }
         }
 
@@ -100,13 +88,7 @@ class SummonerSubscriberServiceImpl(
 
         val summoner = summonerService.getSummonerById(subscriber.summonerId)
 
-        SummonerSubscriberResponse.SummonerSubscriberInfo(
-            id = subscriber.id!!,
-            subscriberId = subscriber.subscriberId,
-            summonerId = subscriber.summonerId,
-            summonerGameName = summoner.gameName,
-            summonerTagLine = summoner.tagLine,
-        )
+        SummonerSubscriberResponse.SummonerSubscriberInfo.of(subscriber, summoner)
     }
 
     override suspend fun getSubscriberBySummonerId(summonerId: Long): List<SummonerSubscriberResponse.SummonerSubscriberInfo> =
@@ -115,13 +97,7 @@ class SummonerSubscriberServiceImpl(
                 .map {
                     val summoner = summonerService.getSummonerById(it.summonerId)
 
-                    SummonerSubscriberResponse.SummonerSubscriberInfo(
-                        id = it.id!!,
-                        subscriberId = it.subscriberId,
-                        summonerId = it.summonerId,
-                        summonerGameName = summoner.gameName,
-                        summonerTagLine = summoner.tagLine
-                    )
+                    SummonerSubscriberResponse.SummonerSubscriberInfo.of(it, summoner)
                 }.toList()
         }
 
