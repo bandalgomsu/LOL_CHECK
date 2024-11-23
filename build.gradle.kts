@@ -84,6 +84,8 @@ dependencies {
     testCompileOnly("org.flywaydb:flyway-mysql")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
+    testImplementation("org.springframework.security:spring-security-test")
 }
 
 dependencyManagement {

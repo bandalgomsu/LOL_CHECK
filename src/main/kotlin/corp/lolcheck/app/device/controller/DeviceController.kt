@@ -27,7 +27,7 @@ class DeviceController(
     }
 
     @Operation(summary = "디바이스 수정", description = "디바이스를 수정합니다")
-    @PostMapping("/api/v1/devices/{deviceId}")
+    @PatchMapping("/api/v1/devices/{deviceId}")
     suspend fun updateDevice(
         @AuthenticationPrincipal principal: CustomUserDetails,
         @PathVariable deviceId: Long,
