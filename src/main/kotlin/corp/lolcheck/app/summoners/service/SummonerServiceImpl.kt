@@ -8,7 +8,6 @@ import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.common.exception.BusinessException
 import corp.lolcheck.infrastructure.riot.RiotClient
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -44,7 +43,7 @@ class SummonerServiceImpl(
                 summonerRepository.findByGameNameAndTagLine(gameName, tagLine) ?: throw BusinessException(
                     SummonerErrorCode.SUMMONER_NOT_FOUND
                 )
-            } catch (e: Exception) {
+            } catch (e: BusinessException) {
                 val puuid: String = riotClient.getPuuid(gameName, tagLine).puuid
 
                 summonerRepository.save(
@@ -63,20 +62,5 @@ class SummonerServiceImpl(
         summonerRepository.findById(summonerId) ?: throw BusinessException(
             SummonerErrorCode.SUMMONER_NOT_FOUND
         )
-    }
-
-    override suspend fun getSummonersLimit49(): Flow<Summoner> = coroutineScope {
-        summonerRepository.findTop49ByOrderByUpdatedAtAsc()
-    }
-
-    override suspend fun updateSummonerRecentGameByIds(summonerIds: List<Long>) = coroutineScope {
-        summonerRepository.updateAllByIdIn(summonerIds)
-    }
-
-    @Transactional
-    override suspend fun updateSummoners(summoners: List<Summoner>) = coroutineScope {
-        summoners.forEach {
-            summonerRepository.save(it)
-        }
     }
 }

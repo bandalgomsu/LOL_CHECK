@@ -1,10 +1,9 @@
-package corp.lolcheck.app.summoners.service
+package corp.lolcheck.app.subcribe.service
 
 import corp.lolcheck.app.subcribe.domain.SummonerSubscriber
 import corp.lolcheck.app.subcribe.dto.SummonerSubscriberResponse
 import corp.lolcheck.app.subcribe.exception.SummonerSubscriberErrorCode
 import corp.lolcheck.app.subcribe.repository.SummonerSubscriberRepository
-import corp.lolcheck.app.subcribe.service.SummonerSubscriberServiceImpl
 import corp.lolcheck.app.summoners.domain.Summoner
 import corp.lolcheck.app.summoners.service.interfaces.SummonerService
 import corp.lolcheck.common.exception.BusinessException
@@ -22,11 +21,11 @@ import kotlin.test.assertEquals
 class SummonerSubscriberServiceImplTest(
 ) {
 
-    private var summonerSubscriberRepository: SummonerSubscriberRepository = mockk<SummonerSubscriberRepository>()
+    private val summonerSubscriberRepository: SummonerSubscriberRepository = mockk<SummonerSubscriberRepository>()
 
-    private var summonerService: SummonerService = mockk<SummonerService>()
+    private val summonerService: SummonerService = mockk<SummonerService>()
 
-    private var summonerSubscriberService: SummonerSubscriberServiceImpl =
+    private val summonerSubscriberService: SummonerSubscriberServiceImpl =
         SummonerSubscriberServiceImpl(
             summonerService = summonerService,
             summonerSubscriberRepository = summonerSubscriberRepository
