@@ -8,19 +8,16 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.switchIfEmpty
 
 @Service
 class UserDetailService(
     private val userRepository: UserReactiveRepository,
 ) : ReactiveUserDetailsService {
 
-    override fun findByUsername(username: String?): Mono<UserDetails> {
-        if (username == null) {
-            return Mono.empty()
-        }
-
+    override fun findByUsername(username: String): Mono<UserDetails> {
         return userRepository.findByEmail(email = username)
-            .onErrorResume { Mono.error(BusinessException(UserErrorCode.USER_NOT_FOUND)) }
+            .switchIfEmpty { Mono.error(BusinessException(UserErrorCode.USER_NOT_FOUND)) }
             .flatMap { Mono.just(CustomUserDetails(it)) }
     }
 }
