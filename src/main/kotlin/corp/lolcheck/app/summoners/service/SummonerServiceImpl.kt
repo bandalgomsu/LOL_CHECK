@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
 class SummonerServiceImpl(
     private val summonerRepository: SummonerRepository,
     private val riotClient: RiotClient,
@@ -32,12 +31,7 @@ class SummonerServiceImpl(
 
             val save = summonerRepository.save(summoner)
 
-            SummonerResponse.SummonerInfo(
-                summonerId = save.id,
-                puuid = save.puuid,
-                gameName = save.gameName,
-                tagLine = save.tagLine,
-            )
+            SummonerResponse.SummonerInfo.from(save)
         }
 
     @Transactional
@@ -62,13 +56,7 @@ class SummonerServiceImpl(
                 )
             }
 
-        SummonerResponse.SummonerInfo(
-            summonerId = summoner.id,
-            puuid = summoner.puuid,
-            gameName = summoner.gameName,
-            tagLine = summoner.tagLine,
-            updatedAt = summoner.updatedAt
-        )
+        SummonerResponse.SummonerInfo.from(summoner)
     }
 
     override suspend fun getSummonerById(summonerId: Long): Summoner = coroutineScope {
