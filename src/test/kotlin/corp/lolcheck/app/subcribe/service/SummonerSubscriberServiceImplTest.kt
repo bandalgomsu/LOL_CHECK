@@ -1,6 +1,5 @@
 package corp.lolcheck.app.summoners.service
 
-import corp.lolcheck.app.subcribe.SummonerSubscriberTestConst.userId
 import corp.lolcheck.app.subcribe.domain.SummonerSubscriber
 import corp.lolcheck.app.subcribe.dto.SummonerSubscriberResponse
 import corp.lolcheck.app.subcribe.exception.SummonerSubscriberErrorCode
@@ -67,10 +66,10 @@ class SummonerSubscriberServiceImplTest(
         coEvery { summonerSubscriberRepository.save(any()) } returns summonerSubscriber
 
         val response: SummonerSubscriberResponse.SummonerSubscriberInfo =
-            summonerSubscriberService.subscribeSummoner(userId, summonerId)
+            summonerSubscriberService.subscribeSummoner(subscriberId, summonerId)
 
         assertEquals(1L, response.id)
-        assertEquals(userId, response.subscriberId)
+        assertEquals(subscriberId, response.subscriberId)
         assertEquals(summonerId, response.summonerId)
         assertEquals("TEST_GAME_NAME", response.summonerGameName)
         assertEquals("TEST_TAG_LINE", response.summonerTagLine)
@@ -108,7 +107,7 @@ class SummonerSubscriberServiceImplTest(
         }
 
         val exception = assertThrows<BusinessException> {
-            summonerSubscriberService.subscribeSummoner(userId, summonerId)
+            summonerSubscriberService.subscribeSummoner(subscriberId, summonerId)
         }
 
         assertEquals(SummonerSubscriberErrorCode.MAX_COUNT_SUBSCRIBE.code, exception.errorCode.getCodeValue())
@@ -157,7 +156,7 @@ class SummonerSubscriberServiceImplTest(
         } returns summonerSubscriber
 
         val exception = assertThrows<BusinessException> {
-            summonerSubscriberService.subscribeSummoner(userId, summonerId)
+            summonerSubscriberService.subscribeSummoner(subscriberId, summonerId)
         }
 
         assertEquals(
@@ -195,10 +194,14 @@ class SummonerSubscriberServiceImplTest(
             subscriberId = subscriberId
         )
 
-        coEvery { summonerSubscriberRepository.findAllBySubscriberId(userId) } returns flow { emit(summonerSubscriber) }
+        coEvery { summonerSubscriberRepository.findAllBySubscriberId(subscriberId) } returns flow {
+            emit(
+                summonerSubscriber
+            )
+        }
         coEvery { summonerService.getSummonerById(summonerId) } returns summoner
 
-        val response = summonerSubscriberService.getMySubscribes(userId).toList()
+        val response = summonerSubscriberService.getMySubscribes(subscriberId).toList()
 
         assertEquals(1, response.size)
         assertEquals(1L, response[0].id)
@@ -258,13 +261,13 @@ class SummonerSubscriberServiceImplTest(
 
         coEvery {
             summonerSubscriberRepository.findBySubscriberIdAndSummonerId(
-                userId,
+                subscriberId,
                 summonerId
             )
         } returns summonerSubscriber
         coEvery { summonerService.getSummonerById(summonerId) } returns summoner
 
-        val response = summonerSubscriberService.getMySubscribe(userId, summonerId)
+        val response = summonerSubscriberService.getMySubscribe(subscriberId, summonerId)
 
         assertEquals(1L, response.id)
         assertEquals(subscriberId, response.subscriberId)
@@ -282,13 +285,13 @@ class SummonerSubscriberServiceImplTest(
 
         coEvery {
             summonerSubscriberRepository.findBySubscriberIdAndSummonerId(
-                userId,
+                subscriberId,
                 summonerId
             )
         } returns null
 
         val exception =
-            assertThrows<BusinessException> { summonerSubscriberService.getMySubscribe(userId, summonerId) }
+            assertThrows<BusinessException> { summonerSubscriberService.getMySubscribe(subscriberId, summonerId) }
 
         assertEquals(
             SummonerSubscriberErrorCode.SUMMONER_SUBSCRIBER_NOT_FOUND.code,
