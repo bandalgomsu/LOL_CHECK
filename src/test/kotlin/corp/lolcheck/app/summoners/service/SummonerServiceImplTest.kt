@@ -19,6 +19,8 @@ import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 class SummonerServiceImplTest {
+    val summonerData = SummonerResponse()
+
     private val summonerRepository: SummonerRepository = mockk<SummonerRepository>()
     private val riotClient: RiotClient = mockk<RiotClient>()
     private val summonerService: SummonerServiceImpl = SummonerServiceImpl(summonerRepository, riotClient)

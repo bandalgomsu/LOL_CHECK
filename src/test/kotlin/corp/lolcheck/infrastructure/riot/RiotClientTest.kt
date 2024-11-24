@@ -20,6 +20,8 @@ class RiotClientTest(
     @Autowired private var riotClient: RiotClient
 ) {
 
+    val riotClientData = RiotClientData()
+
     @Test
     @DisplayName("GET_PUUID_SUCCESS")
     fun GET_PUUID_SUCCESS() = runTest {

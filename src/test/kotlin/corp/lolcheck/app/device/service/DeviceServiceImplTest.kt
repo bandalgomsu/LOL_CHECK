@@ -28,6 +28,9 @@ import kotlin.test.assertFailsWith
 
 @ExtendWith(MockKExtension::class)
 class DeviceServiceImplTest() {
+    val deviceRequest = DeviceRequest()
+    val deviceResponse = DeviceResponse()
+
     private var deviceRepository: DeviceRepository = mockk<DeviceRepository>()
 
     private var deviceService: DeviceServiceImpl = spyk(DeviceServiceImpl(deviceRepository))

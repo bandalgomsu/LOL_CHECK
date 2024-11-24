@@ -27,7 +27,8 @@ class FcmClientTest(
         body = "test",
         tokens = mutableListOf("test")
     )
-
+    val fcmData = FcmData()
+    
     @Test
     @DisplayName("FCM_푸시알림_전송_성공_테스트_(INVALID 토큰 에러)")
     fun FCM_푸시알림_전송_성공_테스트() = runTest {

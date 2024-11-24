@@ -19,9 +19,9 @@ class RedisClient(
             .awaitSingle()
     }
 
-    suspend fun setData(key: String, data: Any, durationMinute: Long): Boolean = coroutineScope {
+    suspend fun setData(key: String, data: Any, durationSeconds: Long): Boolean = coroutineScope {
         redisTemplate.opsForValue()
-            .set(key, data, Duration.ofMinutes(durationMinute))
+            .set(key, data, Duration.ofSeconds(durationSeconds))
             .awaitSingle()
     }
 

@@ -20,6 +20,7 @@ import kotlin.test.assertEquals
 
 class SummonerSubscriberServiceImplTest(
 ) {
+    val summonerSubscriberData = SummonerSubscriberResponse()
 
     private val summonerSubscriberRepository: SummonerSubscriberRepository = mockk<SummonerSubscriberRepository>()
 

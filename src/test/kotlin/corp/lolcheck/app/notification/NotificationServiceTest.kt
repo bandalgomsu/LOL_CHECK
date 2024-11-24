@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 
 
 class NotificationServiceTest {
+    val notificationData = NotificationRequest()
 
     private var fcmClient: FcmClient = mockk();
 

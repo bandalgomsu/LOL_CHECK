@@ -86,6 +86,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.5")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("it.ozimov:embedded-redis:0.7.1")
 }
 
 dependencyManagement {
