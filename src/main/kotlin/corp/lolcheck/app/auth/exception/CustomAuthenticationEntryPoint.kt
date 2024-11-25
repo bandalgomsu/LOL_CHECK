@@ -4,8 +4,6 @@ import AuthErrorCode
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import corp.lolcheck.common.exception.ErrorResponse
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.server.reactive.ServerHttpResponse
@@ -19,15 +17,10 @@ import java.nio.charset.StandardCharsets
 @Component
 class CustomAuthenticationEntryPoint : ServerAuthenticationEntryPoint {
 
-    private val logger: Logger = LoggerFactory.getLogger(CustomAuthenticationEntryPoint::class.java)
-
     override fun commence(exchange: ServerWebExchange?, ex: AuthenticationException?): Mono<Void> {
         val serverHttpResponse: ServerHttpResponse = exchange!!.response
         serverHttpResponse.headers.contentType = MediaType.APPLICATION_JSON
         serverHttpResponse.setStatusCode(HttpStatus.UNAUTHORIZED)
-
-//        logger.error("[ERROR] : UNAUTHORIZED")
-//        logger.error("[ERROR] : PATH = {}", exchange.request.path)
 
         return try {
             val body: String = ObjectMapper()

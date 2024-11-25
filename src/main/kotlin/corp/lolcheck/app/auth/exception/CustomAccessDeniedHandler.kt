@@ -18,14 +18,11 @@ import reactor.core.publisher.Mono
 
 @Component
 class CustomAccessDeniedHandler() : ServerAccessDeniedHandler {
-    private val logger: Logger = LoggerFactory.getLogger(CustomAccessDeniedHandler::class.java)
-
+    
     override fun handle(exchange: ServerWebExchange?, denied: AccessDeniedException?): Mono<Void> {
         val serverHttpResponse: ServerHttpResponse = exchange!!.response
         serverHttpResponse.headers.contentType = MediaType.APPLICATION_JSON
         serverHttpResponse.setStatusCode(HttpStatus.FORBIDDEN)
-
-//        logger.error("[ERROR] : ACCESS_DENIED")
 
         return try {
             val errorByte = ObjectMapper()
