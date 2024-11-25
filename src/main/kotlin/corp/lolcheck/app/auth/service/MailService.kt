@@ -61,7 +61,7 @@ class MailService(
             helper.setText(content, true)
             CoroutineScope(Dispatchers.IO + Job()).launch { mailSender.send(message) }
 
-            redisClient.setData(AuthRedisKey.SIGN_UP_VERIFYING_MAIL.combineKeyValue(to), authNumber, 3)
+            redisClient.setData(AuthRedisKey.SIGN_UP_VERIFYING_MAIL.combineKeyValue(to), authNumber, 180)
 
             authNumber
         }
@@ -84,7 +84,7 @@ class MailService(
 
             listOf(
                 async { redisClient.deleteData(redisKey) },
-                async { redisClient.setData(AuthRedisKey.IS_VERIFIED_USER.combineKeyValue(email), email, 3) }
+                async { redisClient.setData(AuthRedisKey.IS_VERIFIED_USER.combineKeyValue(email), email, 180) }
             ).awaitAll()
 
             MailResponse.VerifySignUpMailResponse(
