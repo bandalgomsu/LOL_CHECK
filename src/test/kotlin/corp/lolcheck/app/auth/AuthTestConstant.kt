@@ -7,4 +7,7 @@ object AuthTestConstant {
 
     const val EMAIL = "TEST@naver.com"
     const val PASSWORD = "TEST"
+
+    const val TEST_ACCESS_TOKEN = "TEST_ACCESS"
+    const val TEST_REFRESH_TOKEN = "TEST_REFRESH"
 }
